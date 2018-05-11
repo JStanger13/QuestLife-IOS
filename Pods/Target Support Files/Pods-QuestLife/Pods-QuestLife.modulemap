@@ -1,0 +1,6 @@
+framework module Pods_QuestLife {
+  umbrella header "Pods-QuestLife-umbrella.h"
+
+  export *
+  module * { export * }
+}
