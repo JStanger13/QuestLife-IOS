@@ -9,6 +9,7 @@
 import UIKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource{
+    @IBOutlet weak var kingTextBox: UILabel!
     
     func newVc(viewController: String) -> UIViewController {
         return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: viewController)
@@ -16,8 +17,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
     
     lazy var orderedViewControllers: [UIViewController] = {
         return [self.newVc(viewController: "sbA"),
-                self.newVc(viewController: "sbB"),
-                self.newVc(viewController: "sbC")]
+                self.newVc(viewController: "sbB")]
     }()
     
     

@@ -8,9 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		405FA6CE0B0F2E02ADDBEBB1 /* Pods_QuestLifeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F9EEDFB1F1BE179D28B947 /* Pods_QuestLifeUITests.framework */; };
+		6692832320A6372E00BCD525 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832220A6372E00BCD525 /* UserModel.swift */; };
+		6692832520A64D5C00BCD525 /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832420A64D5C00BCD525 /* Singleton.swift */; };
+		6692832720A6515000BCD525 /* MainQuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832620A6515000BCD525 /* MainQuestViewController.swift */; };
 		66A0D1C120A509F600B68543 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A0D1C020A509F600B68543 /* PageViewController.swift */; };
 		66A0D1C420A5126600B68543 /* CloisterBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66A0D1C320A5126500B68543 /* CloisterBlack.ttf */; };
 		66A0D1C620A5179C00B68543 /* Rhesmanisa.otf in Resources */ = {isa = PBXBuildFile; fileRef = 66A0D1C520A5179C00B68543 /* Rhesmanisa.otf */; };
+		66A0D1C820A5359D00B68543 /* ChooseCharacterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */; };
 		66F509A4209BEB8700579008 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F509A3209BEB8700579008 /* AppDelegate.swift */; };
 		66F509A9209BEB8700579008 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F509A7209BEB8700579008 /* Main.storyboard */; };
 		66F509AB209BEB8A00579008 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66F509AA209BEB8A00579008 /* Assets.xcassets */; };
@@ -45,9 +49,14 @@
 		2A975CFE7A9C2022E1A556D1 /* Pods_QuestLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuestLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F9287ED3FC18D9B949E8AB1 /* Pods_QuestLifeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuestLifeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4586F24ED8DDA252E1CB68F6 /* Pods-QuestLifeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuestLifeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuestLifeTests/Pods-QuestLifeTests.release.xcconfig"; sourceTree = "<group>"; };
+		6692832220A6372E00BCD525 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		6692832420A64D5C00BCD525 /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
+		6692832620A6515000BCD525 /* MainQuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQuestViewController.swift; sourceTree = "<group>"; };
 		66A0D1C020A509F600B68543 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		66A0D1C320A5126500B68543 /* CloisterBlack.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CloisterBlack.ttf; sourceTree = "<group>"; };
 		66A0D1C520A5179C00B68543 /* Rhesmanisa.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rhesmanisa.otf; sourceTree = "<group>"; };
+		66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCharacterViewController.swift; sourceTree = "<group>"; };
+		66A0D20320A6127800B68543 /* QuestLife.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuestLife.entitlements; sourceTree = "<group>"; };
 		66F509A0209BEB8700579008 /* QuestLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuestLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66F509A3209BEB8700579008 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		66F509A8209BEB8700579008 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -107,6 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				66A0D1C020A509F600B68543 /* PageViewController.swift */,
+				66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */,
+				6692832620A6515000BCD525 /* MainQuestViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -121,6 +132,7 @@
 		663E246520A4F0280050AA11 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6692832220A6372E00BCD525 /* UserModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -159,6 +171,7 @@
 		66F509A2209BEB8700579008 /* QuestLife */ = {
 			isa = PBXGroup;
 			children = (
+				66A0D20320A6127800B68543 /* QuestLife.entitlements */,
 				66F509AA209BEB8A00579008 /* Assets.xcassets */,
 				66F509A7209BEB8700579008 /* Main.storyboard */,
 				663E246520A4F0280050AA11 /* Models */,
@@ -168,6 +181,7 @@
 				66F509A3209BEB8700579008 /* AppDelegate.swift */,
 				66F509AC209BEB8A00579008 /* LaunchScreen.storyboard */,
 				66F509AF209BEB8A00579008 /* Info.plist */,
+				6692832420A64D5C00BCD525 /* Singleton.swift */,
 			);
 			path = QuestLife;
 			sourceTree = "<group>";
@@ -275,6 +289,11 @@
 				TargetAttributes = {
 					66F5099F209BEB8700579008 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 					66F509B3209BEB8A00579008 = {
 						CreatedOnToolsVersion = 9.3;
@@ -417,7 +436,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66A0D1C820A5359D00B68543 /* ChooseCharacterViewController.swift in Sources */,
 				66F509A4209BEB8700579008 /* AppDelegate.swift in Sources */,
+				6692832720A6515000BCD525 /* MainQuestViewController.swift in Sources */,
+				6692832320A6372E00BCD525 /* UserModel.swift in Sources */,
+				6692832520A64D5C00BCD525 /* Singleton.swift in Sources */,
 				66A0D1C120A509F600B68543 /* PageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
