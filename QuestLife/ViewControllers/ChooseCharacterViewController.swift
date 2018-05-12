@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    //var users : Results <UserModel>!
 
     @IBOutlet weak var avatarPickedImage: UIImageView!
     @IBOutlet weak var pickerView: UIPickerView!
@@ -23,6 +25,7 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
         //print(userClass)
         let user = UserModel(userName: textField.text!, userClass: userClass)
         Singleton.sharedInstance.user = user
+        RealmService.shared.create(user)
     }
     
     override func viewDidLoad() {
@@ -31,6 +34,9 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
         pickerView.dataSource = self
         createCharacterButton.isHidden = true
         textField.addTarget(self, action: #selector(ChooseCharacterViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+        
+        //let realm = RealmService.shared.realm
+        //users = realm.objects(UserModel.self)
 
     }
     

@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import RealmSwift
 
-class UserModel {
-    var userClass: String?
-    var userName: String?
+class UserModel : Object{
+    @objc dynamic var userClass: String?
+    @objc dynamic var userName: String?
+    
+   
     convenience init(userName: String, userClass: String) {
         self.init()
 

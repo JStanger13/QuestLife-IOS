@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="f1S-Bm-VmX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R32-ku-ivj">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -80,7 +80,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dm9-Zx-VLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-837" y="577"/>
+            <point key="canvasLocation" x="-887" y="740"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="fk4-9p-D4h">
@@ -112,7 +112,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gzN-B4-0F4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1519" y="572"/>
+            <point key="canvasLocation" x="-1836" y="740"/>
         </scene>
         <!--Choose Character View Controller-->
         <scene sceneID="r9j-j9-r2L">
@@ -175,7 +175,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dtg-rf-MBi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-26.399999999999999" y="574.8768472906404"/>
+            <point key="canvasLocation" x="-39" y="740"/>
         </scene>
         <!--Main Quest View Controller-->
         <scene sceneID="Kx4-FP-gA1">
@@ -238,6 +238,40 @@
             </objects>
             <point key="canvasLocation" x="2279.1999999999998" y="574.8768472906404"/>
         </scene>
+        <!--Root View Controller-->
+        <scene sceneID="Gm9-sa-3VV">
+            <objects>
+                <viewController id="R32-ku-ivj" customClass="RootViewController" customModule="QuestLife" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nkC-9w-P1A">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nI0-Wr-DK3">
+                                <rect key="frame" x="143" y="391" width="89" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Realm Works"/>
+                                <connections>
+                                    <action selector="loadRealm:" destination="R32-ku-ivj" eventType="touchUpInside" id="G1a-pk-dVo"/>
+                                    <segue destination="ef1-ir-qEf" kind="show" id="HaP-Im-aFM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7uR-NT-ssb">
+                                <rect key="frame" x="118" y="429" width="139" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Realm Doesn't Work"/>
+                                <connections>
+                                    <segue destination="f1S-Bm-VmX" kind="show" id="dNl-35-AUV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="U1I-hs-MCp"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yjH-YO-QR4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1836" y="-93"/>
+        </scene>
         <!--Page View Controller-->
         <scene sceneID="7uW-15-rhZ">
             <objects>
@@ -270,4 +304,7 @@
         <image name="quill" width="64" height="64"/>
         <image name="scroll" width="256" height="256"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="HaP-Im-aFM"/>
+    </inferredMetricsTieBreakers>
 </document>
