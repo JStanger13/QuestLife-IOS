@@ -14,6 +14,16 @@ class RealmService{
     static let shared = RealmService()
     var realm = try! Realm()
     
+    func saveObjects(obj: [Object]){
+        try! realm.write {
+            realm.add(obj, update: true)
+        }
+    }
+    
+    func getObjetcs(type: Object.Type) -> Results<Object>?{
+        return realm.objects(type)
+    }//</object></objects>
+    /*
     func create<T: Object>(_ object: T){
         do {
             try realm.write {
@@ -24,12 +34,10 @@ class RealmService{
         }
     }
     
-    func update<T: Object>(_ object: T, with directory: [String: Any?]){
+    func update<T: Object>(_ object: T){
         do{
             try realm.write{
-                for(key, value) in directory {
-                    object.setValue(value, forKey: key)
-                }
+                realm.objects(UserModel)[0].mainQuestList.append(<#T##object: MainQuestModel##MainQuestModel#>)
             }
             
         }catch{
@@ -52,6 +60,7 @@ class RealmService{
     func post(_ error: Error)  {
         NotificationCenter.default.post(name: NSNotification.Name("RealmError"), object: error)
     }
+    
     func observeRealmErrors(in vc: UIViewController, completion: @escaping (Error?) -> Void)  {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("RealmError"),
                                                object: nil,
@@ -64,4 +73,5 @@ class RealmService{
     func stopObservingErrors(in vc: UIViewController){
         NotificationCenter.default.removeObserver(vc, name: NSNotification.Name("RealmError"), object: nil)
     }
+ */
 }

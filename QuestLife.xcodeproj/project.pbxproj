@@ -8,11 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		405FA6CE0B0F2E02ADDBEBB1 /* Pods_QuestLifeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F9EEDFB1F1BE179D28B947 /* Pods_QuestLifeUITests.framework */; };
+		668CD74D20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CD74C20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift */; };
+		668CD75020AA30B50039DD30 /* DatePickerPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CD74F20AA30B50039DD30 /* DatePickerPopupViewController.swift */; };
 		6692832320A6372E00BCD525 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832220A6372E00BCD525 /* UserModel.swift */; };
 		6692832520A64D5C00BCD525 /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832420A64D5C00BCD525 /* Singleton.swift */; };
 		6692832720A6515000BCD525 /* MainQuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832620A6515000BCD525 /* MainQuestViewController.swift */; };
 		6692832A20A656C300BCD525 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832920A656C300BCD525 /* RealmService.swift */; };
 		6692832C20A658D900BCD525 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832B20A658D900BCD525 /* RootViewController.swift */; };
+		6692832E20A7766200BCD525 /* SideQuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832D20A7766200BCD525 /* SideQuestViewController.swift */; };
+		6692833220A7A55D00BCD525 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833120A7A55D00BCD525 /* MainNavigationController.swift */; };
+		6692833420A7F6E500BCD525 /* MainQuestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833320A7F6E500BCD525 /* MainQuestModel.swift */; };
+		6692833620A7F6F600BCD525 /* SideQuestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833520A7F6F600BCD525 /* SideQuestModel.swift */; };
+		6692833820A7FC1300BCD525 /* MainQuestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833720A7FC1300BCD525 /* MainQuestCell.swift */; };
+		6692833A20A7FC2400BCD525 /* SideQuestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833920A7FC2400BCD525 /* SideQuestCell.swift */; };
+		6692833C20A804C900BCD525 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833B20A804C900BCD525 /* Checkbox.swift */; };
+		6692833E20A930EC00BCD525 /* BossService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692833D20A930EC00BCD525 /* BossService.swift */; };
 		66A0D1C120A509F600B68543 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A0D1C020A509F600B68543 /* PageViewController.swift */; };
 		66A0D1C420A5126600B68543 /* CloisterBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 66A0D1C320A5126500B68543 /* CloisterBlack.ttf */; };
 		66A0D1C620A5179C00B68543 /* Rhesmanisa.otf in Resources */ = {isa = PBXBuildFile; fileRef = 66A0D1C520A5179C00B68543 /* Rhesmanisa.otf */; };
@@ -51,11 +61,21 @@
 		2A975CFE7A9C2022E1A556D1 /* Pods_QuestLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuestLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F9287ED3FC18D9B949E8AB1 /* Pods_QuestLifeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuestLifeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4586F24ED8DDA252E1CB68F6 /* Pods-QuestLifeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuestLifeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuestLifeTests/Pods-QuestLifeTests.release.xcconfig"; sourceTree = "<group>"; };
+		668CD74C20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMainQuestPopupViewController.swift; sourceTree = "<group>"; };
+		668CD74F20AA30B50039DD30 /* DatePickerPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerPopupViewController.swift; sourceTree = "<group>"; };
 		6692832220A6372E00BCD525 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		6692832420A64D5C00BCD525 /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		6692832620A6515000BCD525 /* MainQuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQuestViewController.swift; sourceTree = "<group>"; };
 		6692832920A656C300BCD525 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		6692832B20A658D900BCD525 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		6692832D20A7766200BCD525 /* SideQuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideQuestViewController.swift; sourceTree = "<group>"; };
+		6692833120A7A55D00BCD525 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		6692833320A7F6E500BCD525 /* MainQuestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQuestModel.swift; sourceTree = "<group>"; };
+		6692833520A7F6F600BCD525 /* SideQuestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideQuestModel.swift; sourceTree = "<group>"; };
+		6692833720A7FC1300BCD525 /* MainQuestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQuestCell.swift; sourceTree = "<group>"; };
+		6692833920A7FC2400BCD525 /* SideQuestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideQuestCell.swift; sourceTree = "<group>"; };
+		6692833B20A804C900BCD525 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		6692833D20A930EC00BCD525 /* BossService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BossService.swift; sourceTree = "<group>"; };
 		66A0D1C020A509F600B68543 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		66A0D1C320A5126500B68543 /* CloisterBlack.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CloisterBlack.ttf; sourceTree = "<group>"; };
 		66A0D1C520A5179C00B68543 /* Rhesmanisa.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rhesmanisa.otf; sourceTree = "<group>"; };
@@ -119,10 +139,12 @@
 		663E246320A4EFF80050AA11 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				6692832620A6515000BCD525 /* MainQuestViewController.swift */,
-				66A0D1C020A509F600B68543 /* PageViewController.swift */,
-				66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */,
+				668CD74E20AA04B80039DD30 /* QuestViewControllers */,
+				668CD74920A9E2990039DD30 /* Popup View Controllers */,
 				6692832B20A658D900BCD525 /* RootViewController.swift */,
+				66A0D1C020A509F600B68543 /* PageViewController.swift */,
+				6692833120A7A55D00BCD525 /* MainNavigationController.swift */,
+				66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -130,6 +152,8 @@
 		663E246420A4F0080050AA11 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
+				6692833720A7FC1300BCD525 /* MainQuestCell.swift */,
+				6692833920A7FC2400BCD525 /* SideQuestCell.swift */,
 			);
 			path = CustomCells;
 			sourceTree = "<group>";
@@ -138,14 +162,35 @@
 			isa = PBXGroup;
 			children = (
 				6692832220A6372E00BCD525 /* UserModel.swift */,
+				6692833320A7F6E500BCD525 /* MainQuestModel.swift */,
+				6692833520A7F6F600BCD525 /* SideQuestModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		668CD74920A9E2990039DD30 /* Popup View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				668CD74C20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift */,
+				668CD74F20AA30B50039DD30 /* DatePickerPopupViewController.swift */,
+			);
+			path = "Popup View Controllers";
+			sourceTree = "<group>";
+		};
+		668CD74E20AA04B80039DD30 /* QuestViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6692832620A6515000BCD525 /* MainQuestViewController.swift */,
+				6692832D20A7766200BCD525 /* SideQuestViewController.swift */,
+			);
+			path = QuestViewControllers;
 			sourceTree = "<group>";
 		};
 		6692832820A656A000BCD525 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				6692832920A656C300BCD525 /* RealmService.swift */,
+				6692833D20A930EC00BCD525 /* BossService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -184,18 +229,19 @@
 		66F509A2209BEB8700579008 /* QuestLife */ = {
 			isa = PBXGroup;
 			children = (
-				6692832820A656A000BCD525 /* Services */,
 				66A0D20320A6127800B68543 /* QuestLife.entitlements */,
-				66F509AA209BEB8A00579008 /* Assets.xcassets */,
 				66F509A7209BEB8700579008 /* Main.storyboard */,
+				66F509AA209BEB8A00579008 /* Assets.xcassets */,
+				663E246320A4EFF80050AA11 /* ViewControllers */,
 				663E246520A4F0280050AA11 /* Models */,
 				663E246420A4F0080050AA11 /* CustomCells */,
-				663E246320A4EFF80050AA11 /* ViewControllers */,
+				6692832820A656A000BCD525 /* Services */,
 				66A0D1C220A5124700B68543 /* Fonts */,
 				66F509A3209BEB8700579008 /* AppDelegate.swift */,
 				66F509AC209BEB8A00579008 /* LaunchScreen.storyboard */,
 				66F509AF209BEB8A00579008 /* Info.plist */,
 				6692832420A64D5C00BCD525 /* Singleton.swift */,
+				6692833B20A804C900BCD525 /* Checkbox.swift */,
 			);
 			path = QuestLife;
 			sourceTree = "<group>";
@@ -450,14 +496,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6692833220A7A55D00BCD525 /* MainNavigationController.swift in Sources */,
+				6692833420A7F6E500BCD525 /* MainQuestModel.swift in Sources */,
 				66A0D1C820A5359D00B68543 /* ChooseCharacterViewController.swift in Sources */,
 				66F509A4209BEB8700579008 /* AppDelegate.swift in Sources */,
+				6692833E20A930EC00BCD525 /* BossService.swift in Sources */,
 				6692832A20A656C300BCD525 /* RealmService.swift in Sources */,
+				6692832E20A7766200BCD525 /* SideQuestViewController.swift in Sources */,
+				668CD75020AA30B50039DD30 /* DatePickerPopupViewController.swift in Sources */,
 				6692832720A6515000BCD525 /* MainQuestViewController.swift in Sources */,
+				6692833A20A7FC2400BCD525 /* SideQuestCell.swift in Sources */,
+				668CD74D20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift in Sources */,
 				6692832320A6372E00BCD525 /* UserModel.swift in Sources */,
 				6692832520A64D5C00BCD525 /* Singleton.swift in Sources */,
 				6692832C20A658D900BCD525 /* RootViewController.swift in Sources */,
 				66A0D1C120A509F600B68543 /* PageViewController.swift in Sources */,
+				6692833620A7F6F600BCD525 /* SideQuestModel.swift in Sources */,
+				6692833820A7FC1300BCD525 /* MainQuestCell.swift in Sources */,
+				6692833C20A804C900BCD525 /* Checkbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

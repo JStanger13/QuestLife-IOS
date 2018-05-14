@@ -24,8 +24,10 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
         let userClass = avatarClassLabel.text!
         //print(userClass)
         let user = UserModel(userName: textField.text!, userClass: userClass)
-        Singleton.sharedInstance.user = user
-        RealmService.shared.create(user)
+        RealmService.shared.saveObjects(obj: [user])
+
+        //Singleton.sharedInstance.user = user
+        
     }
     
     override func viewDidLoad() {
@@ -35,7 +37,7 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
         createCharacterButton.isHidden = true
         textField.addTarget(self, action: #selector(ChooseCharacterViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
         
-        //let realm = RealmService.shared.realm
+        let realm = RealmService.shared.realm
         //users = realm.objects(UserModel.self)
 
     }
