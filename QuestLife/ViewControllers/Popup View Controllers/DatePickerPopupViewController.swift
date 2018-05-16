@@ -8,28 +8,46 @@
 
 import UIKit
 
-class DatePickerPopupViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+class DatePickerPopupViewController: UIViewController{
+    var mainQuest: MainQuestModel?
+    @IBOutlet weak var datePicker: UIDatePicker!
+    
+    @IBOutlet weak var dateLabel: UILabel!
+    
+   
+    @IBAction func backButton(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func setDateButton(_ sender: Any) {
+        mainQuest?.mainDate = dateLabel.text
+        RealmService.shared.saveObjects(obj: [mainQuest!])
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mainQuest = Singleton.sharedInstance.mainQuest
+        //dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
 
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        var strDate = dateFormatter.string(from: datePicker.date)
+        self.dateLabel.text = strDate
+      
+    }
+   
+    @IBAction func datePickerAction(_ sender: Any) {
+        
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        var strDate = dateFormatter.string(from: datePicker.date)
+        self.dateLabel.text = strDate
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        // Dispose of any resources that can be recreated.
+    }
 }

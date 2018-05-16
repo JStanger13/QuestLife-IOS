@@ -22,7 +22,15 @@ class RealmService{
     
     func getObjetcs(type: Object.Type) -> Results<Object>?{
         return realm.objects(type)
-    }//</object></objects>
+    }
+    func deleteObjects(obj: [Object]){
+        try! realm.write {
+            realm.delete(obj)
+        }
+    }
+    
+    
+    //</object></objects>
     /*
     func create<T: Object>(_ object: T){
         do {

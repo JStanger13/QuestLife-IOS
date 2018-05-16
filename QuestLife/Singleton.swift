@@ -12,4 +12,6 @@ class Singleton{
     static let sharedInstance = Singleton()
     private init() {}
     var user : UserModel?
+    
+    var mainQuest : MainQuestModel?
 }

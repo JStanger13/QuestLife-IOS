@@ -15,6 +15,7 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var avatarIcon: UIImageView!
     
+    @IBOutlet weak var collectionView: UICollectionView!
     var user : UserModel?
     var users : Results <UserModel>!
     var mainQuestList : Results<Object>!
@@ -26,7 +27,6 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         user = users[0]
         
         self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
-        
     
         
         let userClassString = user?.userClass
@@ -46,11 +46,27 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainQuestCell", for: indexPath) as? MainQuestCell else { return UICollectionViewCell() }
         let mainQuest = mainQuestList[indexPath.row]
         cell.Configure(with: mainQuest as! MainQuestModel)
+        cell.delegate = self
+        
         return cell
     }
+    
 
+    @objc func saveCurrentMainQuest(sender: UIButton){
+        Singleton.sharedInstance.mainQuest =  mainQuestList[sender.tag] as? MainQuestModel
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
      
+    }
+}
+extension MainQuestViewController : MainQuestCellDelegate {
+    func delete(cell: MainQuestCell) {
+        if let indexPath = collectionView?.indexPath(for: cell){
+            let item = mainQuestList[indexPath.row]
+            RealmService.shared.deleteObjects(obj: [item])
+            collectionView.reloadData()
+        }
     }
 }
