@@ -18,16 +18,25 @@ class TimePickerPopupViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func setTimeButton(_ sender: Any) {
+        
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (mainQuest?.mainTitle)!, boss: (mainQuest?.mainBoss)!, date:(mainQuest?.mainDate!)!, time: timeLabel.text!, key: (mainQuest?.mainQuestID)!)])
+    }
+    
     @IBAction func timePickerAction(_ sender: Any) {
+       
         var timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
         var strTime = timeFormatter.string(from: timePicker.date)
         self.timeLabel.text = strTime
+ 
+        
     }
     
+    @IBOutlet weak var setTimeButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        mainQuest = Singleton.sharedInstance.mainQuest
         var timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
         var strTime = timeFormatter.string(from: timePicker.date)

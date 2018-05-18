@@ -25,12 +25,7 @@ class CreateMainQuestPopupViewController: UIViewController {
         bossImage.image = UIImage(named: boss!)
         bossLabel.text = boss!
        
-        //let realm = RealmService.shared.realm
-        //users = realm.objects(UserModel.self)
-        //user = users[0]
-        
-        //let realm = RealmService.shared.realm
-        //RealmService.shared.create(user)
+       
 
     }
 
@@ -40,9 +35,14 @@ class CreateMainQuestPopupViewController: UIViewController {
     }
     
     @IBAction func createButton(_ sender: Any) {
-        let mainQuest = MainQuestModel(title: textField.text!, boss: boss!, date: " ")
-        RealmService.shared.saveObjects(obj: [mainQuest])
-    
+        let mainQuest = MainQuestModel(title: textField.text!, boss: boss!, date: "No Date ", time: "No Time")
+        let mTitle = mainQuest.mainTitle
+        let mBoss = mainQuest.mainBoss
+        let mDate = mainQuest.mainDate
+        let mTime = mainQuest.mainTime
+        let mKey = mainQuest.mainQuestID
+
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: mTitle!, boss: mBoss!, date: mDate!, time: mTime!, key: mKey)])
         
     }
     

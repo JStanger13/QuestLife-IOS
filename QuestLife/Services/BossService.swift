@@ -82,7 +82,7 @@ class BossService {
             bossName = "Vampire"
             break
         case 21:
-            bossName = "Warewolf"
+            bossName = "Werewolf"
             break
         case 22:
             bossName = "Witch"

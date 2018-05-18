@@ -7,40 +7,49 @@
 //
 
 import UIKit
+import RealmSwift
 
-class SideQuestViewController: UIViewController {
-    var user : UserModel?
+class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+    var sideQuestList : Results<Object>!
+
+   
     
-    @IBOutlet weak var userClassLabel: UILabel!
-    @IBOutlet weak var userNameLabel: UILabel!
-    @IBOutlet weak var avatarIcon: UIImageView!
+    @IBOutlet weak var bossNameLabel: UILabel!
+    
+    @IBOutlet weak var mainQuestSideLabel: UILabel!
+    @IBOutlet weak var sideBossImage: UIImageView!
+    
+    var mainQuest: MainQuestModel?
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-        
-        user = Singleton.sharedInstance.user
-        let userClassString = user?.userClass
-        avatarIcon.image = UIImage(named: userClassString!)
-        userClassLabel.text = userClassString
-        
-        userNameLabel.text = user?.userName
+        mainQuest = Singleton.sharedInstance.mainQuest
+        mainQuestSideLabel.text = mainQuest?.mainTitle
+        sideBossImage.image = UIImage(named: (mainQuest?.mainBoss)!)
+        bossNameLabel.text = mainQuest?.mainBoss
+        self.sideQuestList = RealmService.shared.getObjetcs(type: SideQuestModel.self)
+
     }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.sideQuestList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SideQuestCell", for: indexPath) as? SideQuestCell else { return UICollectionViewCell() }
+        let sideQuest = sideQuestList[indexPath.row]
+        cell.Configure(with: sideQuest as! SideQuestModel)
+        
+        return cell
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

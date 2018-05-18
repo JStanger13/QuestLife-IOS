@@ -14,6 +14,6 @@ class SideQuestCell: UICollectionViewCell {
     @IBOutlet weak var sideQuestTitleLabel: UILabel!
     
     func Configure(with sideQuestModel: SideQuestModel){
-      
+        sideQuestTitleLabel.text = sideQuestModel.sideTitle
     }
 }

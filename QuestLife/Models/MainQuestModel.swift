@@ -13,6 +13,7 @@ class MainQuestModel: Object{
     @objc dynamic var mainTitle: String?
     @objc dynamic var mainBoss: String?
     @objc dynamic var mainDate: String?
+    @objc dynamic var mainTime: String?
     @objc dynamic var mainQuestID = UUID().uuidString
     
     override static func primaryKey() -> String? {
@@ -20,10 +21,20 @@ class MainQuestModel: Object{
     }
 
 
-    convenience init(title: String, boss: String, date: String) {
+    convenience init(title: String, boss: String, date: String, time: String) {
         self.init()
         self.mainTitle = title
         self.mainBoss = boss
         self.mainDate = date
+        self.mainTime = time
+    }
+    
+    convenience init(title: String, boss: String, date: String, time: String, key: String) {
+        self.init()
+        self.mainTitle = title
+        self.mainBoss = boss
+        self.mainDate = date
+        self.mainTime = time
+        self.mainQuestID = key
     }
 }
