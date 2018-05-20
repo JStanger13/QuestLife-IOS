@@ -11,8 +11,8 @@ import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    //let realm = try! Realm()
     
+    let uiRealm = try! Realm()
     var window: UIWindow?
     
 

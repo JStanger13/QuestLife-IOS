@@ -20,7 +20,7 @@ class TimePickerPopupViewController: UIViewController {
     
     @IBAction func setTimeButton(_ sender: Any) {
         
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (mainQuest?.mainTitle)!, boss: (mainQuest?.mainBoss)!, date:(mainQuest?.mainDate!)!, time: timeLabel.text!, key: (mainQuest?.mainQuestID)!)])
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (mainQuest?.mainTitle)!, boss: (mainQuest?.mainBoss)!, date:(mainQuest?.mainDate)!, time: timeLabel.text!, key: (mainQuest?.mainQuestID)!)])
     }
     
     @IBAction func timePickerAction(_ sender: Any) {

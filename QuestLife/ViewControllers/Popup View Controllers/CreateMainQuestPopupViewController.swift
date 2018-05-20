@@ -18,6 +18,7 @@ class CreateMainQuestPopupViewController: UIViewController {
     @IBOutlet weak var bossImage: UIImageView!
     @IBOutlet weak var bossLabel: UILabel!
     var boss: String?
+    //var uiRealm = (UIApplication.shared.delegate as! AppDelegate).uiRealm
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,17 +35,14 @@ class CreateMainQuestPopupViewController: UIViewController {
 
     }
     
-    @IBAction func createButton(_ sender: Any) {
-        let mainQuest = MainQuestModel(title: textField.text!, boss: boss!, date: "No Date ", time: "No Time")
-        let mTitle = mainQuest.mainTitle
-        let mBoss = mainQuest.mainBoss
-        let mDate = mainQuest.mainDate
-        let mTime = mainQuest.mainTime
-        let mKey = mainQuest.mainQuestID
 
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: mTitle!, boss: mBoss!, date: mDate!, time: mTime!, key: mKey)])
+    
+    @IBAction func createButton(_ sender: Any) {
+       RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: "", time: "")])
         
+        print(textField.text)
     }
+    
     
 
     @IBAction func backButton(_ sender: Any) {

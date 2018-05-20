@@ -12,8 +12,7 @@ protocol MainQuestCellDelegate: class {
     func delete(cell: MainQuestCell)
     func setDate(cell: MainQuestCell)
     func setTime(cell: MainQuestCell)
-    func goToSideQuest(cell: MainQuestCell)
-
+    //func goToSideQuest(cell: MainQuestCell)
 }
 
 class MainQuestCell: UICollectionViewCell {
@@ -29,11 +28,10 @@ class MainQuestCell: UICollectionViewCell {
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var timeButton: UIButton!
     
-    @IBOutlet weak var sideQuestButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
     func Configure(with mainQuestModel: MainQuestModel){
-        bossImage.image = UIImage(named: mainQuestModel.mainBoss!)
+        bossImage.image = UIImage(named: mainQuestModel.mainBoss)
         mainQuestTitleLabel.text = mainQuestModel.mainTitle
         dateLabel.text = mainQuestModel.mainDate
         timeLabel.text = mainQuestModel.mainTime
@@ -50,10 +48,4 @@ class MainQuestCell: UICollectionViewCell {
     @IBAction func timeButtonTapped(_ sender: Any) {
         delegate?.setTime(cell: self)
     }
-    
-    
-    @IBAction func sideQuestButtonTapped(_ sender: Any) {
-        delegate?.goToSideQuest(cell: self)
-    }
-    
 }

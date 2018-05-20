@@ -9,8 +9,15 @@
 import Foundation
 import RealmSwift
 
-class SideQuestModel : Object{
-    @objc dynamic var sideTitle : String?
+class SideQuestModel: Object{
+    @objc var sideTitle: String!
+
+    
+    @objc dynamic var sideQuestID = UUID().uuidString
+    
+    override static func primaryKey() -> String? {
+        return "sideQuestID"
+    }
     
     convenience init(title: String) {
         self.init()

@@ -94,7 +94,7 @@ class BossService {
             bossName = "Zombie"
             break
         case 25:
-            bossName = "loch-ness-monster"
+            bossName = "Loch-Ness-Monster"
             break
         default:
             break

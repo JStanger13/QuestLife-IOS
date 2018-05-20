@@ -12,8 +12,12 @@ class SideQuestCell: UICollectionViewCell {
     
     @IBOutlet weak var checkBox: Checkbox!
     @IBOutlet weak var sideQuestTitleLabel: UILabel!
+
     
     func Configure(with sideQuestModel: SideQuestModel){
         sideQuestTitleLabel.text = sideQuestModel.sideTitle
+        checkBox.borderStyle = .circle
+        checkBox.checkmarkStyle = .circle
+        checkBox.useHapticFeedback = true
     }
 }

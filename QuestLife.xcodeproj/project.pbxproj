@@ -138,15 +138,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		660FF3E020B0D2E90011DD7A /* LoginControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6692832B20A658D900BCD525 /* RootViewController.swift */,
+				66A0D1C020A509F600B68543 /* PageViewController.swift */,
+				6692833120A7A55D00BCD525 /* MainNavigationController.swift */,
+				66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */,
+			);
+			path = LoginControllers;
+			sourceTree = "<group>";
+		};
 		663E246320A4EFF80050AA11 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				668CD74E20AA04B80039DD30 /* QuestViewControllers */,
 				668CD74920A9E2990039DD30 /* Popup View Controllers */,
-				6692832B20A658D900BCD525 /* RootViewController.swift */,
-				66A0D1C020A509F600B68543 /* PageViewController.swift */,
-				6692833120A7A55D00BCD525 /* MainNavigationController.swift */,
-				66A0D1C720A5359D00B68543 /* ChooseCharacterViewController.swift */,
+				660FF3E020B0D2E90011DD7A /* LoginControllers */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

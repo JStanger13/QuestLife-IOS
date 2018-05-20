@@ -36,7 +36,7 @@ class DatePickerPopupViewController: UIViewController{
         super.viewDidLoad()
         self.mainQuest = Singleton.sharedInstance.mainQuest
         //dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        print("Time is \(mainQuest?.mainTime! as! String)")
+        print("Time is \(mainQuest?.mainTime as! String)")
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"

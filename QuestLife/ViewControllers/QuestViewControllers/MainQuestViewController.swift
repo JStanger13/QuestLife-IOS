@@ -16,6 +16,7 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
     @IBOutlet weak var avatarIcon: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    //var uiRealm = (UIApplication.shared.delegate as! AppDelegate).uiRealm
     var user : UserModel?
     var users : Results <UserModel>!
     var mainQuestList : Results<Object>!
@@ -27,8 +28,11 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         users = realm.objects(UserModel.self)
         user = users[0]
         
-        self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
-    
+        //readTasksAndUpdateUI()
+        //self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
+        self.mainQuestList = RealmService.shared.getMainQuests(type: MainQuestModel.self)
+        self.collectionView.reloadData()
+
         
         let userClassString = user?.userClass
         
@@ -38,6 +42,11 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         userNameLabel.text = user?.userName
     }
 
+
+    func readTasksAndUpdateUI(){
+        self.mainQuestList = RealmService.shared.getMainQuests(type: MainQuestModel.self)
+        self.collectionView.reloadData()
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return (mainQuestList.count)
@@ -54,7 +63,7 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = mainQuestList[indexPath.row]
         Singleton.sharedInstance.mainQuest = item as? MainQuestModel
-        print(Singleton.sharedInstance.mainQuest?.mainTitle)
+        //print(Singleton.sharedInstance.mainQuest?.mainTitle)
      
     }
     
@@ -85,15 +94,7 @@ extension MainQuestViewController : MainQuestCellDelegate {
         }
     }
     
-    
-    func goToSideQuest(cell: MainQuestCell) {
-        if let indexPath = collectionView?.indexPath(for: cell){
-            let item = mainQuestList[indexPath.row]
-            Singleton.sharedInstance.mainQuest = item as? MainQuestModel
-            print(Singleton.sharedInstance.mainQuest?.mainTitle)
-        }
-    }
-    
+  
     
     func delete(cell: MainQuestCell) {
         if let indexPath = collectionView?.indexPath(for: cell){
