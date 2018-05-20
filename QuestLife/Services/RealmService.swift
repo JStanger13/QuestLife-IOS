@@ -23,6 +23,12 @@ class RealmService{
     func getObjetcs(type: Object.Type) -> Results<Object>?{
         return realm.objects(type)
     }
+    
+    func getFilteredObjetcs(type: Object.Type, key: String) -> Results<Object>? {
+        let predicate = NSPredicate(format: "mainKey == %@", key)
+        return realm.objects(type)
+    }
+    
     func deleteObjects(obj: [Object]){
         try! realm.write {
             realm.delete(obj)

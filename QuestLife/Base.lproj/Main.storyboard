@@ -789,15 +789,15 @@
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="Fja-bN-nXW" id="W5A-AP-HJe"/>
-                                    <outlet property="delegate" destination="Fja-bN-nXW" id="ohx-Jq-oxb"/>
+                                    <outlet property="dataSource" destination="Fja-bN-nXW" id="6uu-Z8-oTt"/>
+                                    <outlet property="delegate" destination="Fja-bN-nXW" id="cLo-7u-1vC"/>
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qm-q0-Vfo">
                                 <rect key="frame" x="286" y="694" width="64" height="64"/>
                                 <state key="normal" image="quill"/>
                                 <connections>
-                                    <action selector="createSideQuestTapped:" destination="Fja-bN-nXW" eventType="touchUpInside" id="Mob-4v-Tv6"/>
+                                    <action selector="addSideQuest:" destination="Fja-bN-nXW" eventType="touchUpInside" id="U4M-JU-rPY"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -819,87 +819,13 @@
                         <viewLayoutGuide key="safeArea" id="H1U-LK-dHu"/>
                     </view>
                     <connections>
-                        <outlet property="addPopUpView" destination="sDt-Mh-2rr" id="HaU-Fo-D9U"/>
                         <outlet property="bossNameLabel" destination="vGc-s2-xGt" id="2R8-DJ-WVa"/>
-                        <outlet property="collectionView" destination="gZ5-wF-Mqf" id="AhZ-jD-Cw2"/>
+                        <outlet property="collectionView" destination="gZ5-wF-Mqf" id="ymg-ig-Ho6"/>
                         <outlet property="mainQuestSideLabel" destination="BAL-07-nxS" id="kpS-MQ-Ihv"/>
-                        <outlet property="popuptTextField" destination="T4Y-o0-0mS" id="IXv-kt-tfR"/>
                         <outlet property="sideBossImage" destination="KIk-Ax-fgQ" id="U4Z-cI-F76"/>
-                        <outlet property="visualEffect" destination="Tcp-ia-Bbq" id="rA4-K4-zER"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NVa-Qe-7p5" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="sDt-Mh-2rr">
-                    <rect key="frame" x="0.0" y="0.0" width="377" height="587"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tcp-ia-Bbq">
-                            <rect key="frame" x="1" y="0.0" width="375" height="830"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="axQ-pk-Soj">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="830"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </view>
-                            <blurEffect style="light"/>
-                        </visualEffectView>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9yS-bP-qid">
-                            <rect key="frame" x="0.0" y="176" width="375" height="377"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="scroll" translatesAutoresizingMaskIntoConstraints="NO" id="PaP-Mg-TJY">
-                                    <rect key="frame" x="0.0" y="157" width="375" height="95"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="0.20221434050000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </imageView>
-                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Createth thy task!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T4Y-o0-0mS">
-                                    <rect key="frame" x="78" y="230" width="196" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <nil key="textColor"/>
-                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="10"/>
-                                    <textInputTraits key="textInputTraits"/>
-                                </textField>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create Thy Side Quest" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="am9-Pt-4Ga">
-                                    <rect key="frame" x="75" y="148" width="224" height="30"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="CloisterBlack-Light" family="Cloister Black" pointSize="23"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lA2-tv-Wv2">
-                                    <rect key="frame" x="279" y="230" width="22" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="checked">
-                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="submitSideQuestTapped:" destination="Fja-bN-nXW" eventType="touchUpInside" id="iL9-Kk-zgh"/>
-                                    </connections>
-                                </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add a task to help you achieve your goal!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyh-ss-o6e">
-                                    <rect key="frame" x="78" y="178" width="224" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="11"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUS-lB-vF0">
-                                    <rect key="frame" x="282" y="102" width="20" height="20"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="8"/>
-                                    <state key="normal" image="error">
-                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="backTapped:" destination="Fja-bN-nXW" eventType="touchUpInside" id="G39-Wj-Mrc"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <viewLayoutGuide key="safeArea" id="zAh-Wx-oBh"/>
-                </view>
             </objects>
             <point key="canvasLocation" x="5885.6000000000004" y="530.54187192118229"/>
         </scene>
@@ -950,6 +876,6 @@
         <image name="time" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="hWz-aw-Q7d"/>
+        <segue reference="rXW-H7-gzR"/>
     </inferredMetricsTieBreakers>
 </document>

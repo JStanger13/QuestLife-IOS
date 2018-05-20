@@ -30,7 +30,7 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         
         //readTasksAndUpdateUI()
         //self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
-        self.mainQuestList = RealmService.shared.getMainQuests(type: MainQuestModel.self)
+        self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
         self.collectionView.reloadData()
 
         
@@ -43,10 +43,7 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
     }
 
 
-    func readTasksAndUpdateUI(){
-        self.mainQuestList = RealmService.shared.getMainQuests(type: MainQuestModel.self)
-        self.collectionView.reloadData()
-    }
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return (mainQuestList.count)
