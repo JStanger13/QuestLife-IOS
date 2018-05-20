@@ -41,9 +41,6 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         
         userNameLabel.text = user?.userName
     }
-
-
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return (mainQuestList.count)
@@ -57,13 +54,13 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = mainQuestList[indexPath.row]
         Singleton.sharedInstance.mainQuest = item as? MainQuestModel
         //print(Singleton.sharedInstance.mainQuest?.mainTitle)
      
     }
-    
   
     @objc func saveCurrentMainQuest(sender: UIButton){
         Singleton.sharedInstance.mainQuest =  mainQuestList[sender.tag] as? MainQuestModel
@@ -74,6 +71,7 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
      
     }
 }
+
 extension MainQuestViewController : MainQuestCellDelegate {
     func setDate(cell: MainQuestCell) {
         if let indexPath = collectionView?.indexPath(for: cell){
@@ -90,8 +88,6 @@ extension MainQuestViewController : MainQuestCellDelegate {
             Singleton.sharedInstance.mainQuest = item as? MainQuestModel
         }
     }
-    
-  
     
     func delete(cell: MainQuestCell) {
         if let indexPath = collectionView?.indexPath(for: cell){

@@ -11,7 +11,6 @@ import RealmSwift
 
 class CreateMainQuestPopupViewController: UIViewController {
 
-    
     @IBOutlet weak var textField: UITextField!
     //var user : UserModel?
     //var users : Results <UserModel>!
@@ -25,21 +24,15 @@ class CreateMainQuestPopupViewController: UIViewController {
         self.boss = BossService.generateBoss(num: Int(arc4random_uniform(26)))
         bossImage.image = UIImage(named: boss!)
         bossLabel.text = boss!
-       
-       
-
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
 
     }
-    
 
-    
     @IBAction func createButton(_ sender: Any) {
-       RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: "", time: "")])
-        
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: "", time: "")])
         print(textField.text)
     }
     

@@ -18,7 +18,6 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
     
     var mainQuest: MainQuestModel?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         mainQuest = Singleton.sharedInstance.mainQuest
@@ -26,7 +25,6 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         sideBossImage.image = UIImage(named: (mainQuest?.mainBoss)!)
         bossNameLabel.text = mainQuest?.mainBoss
         self.sideQuestList = RealmService.shared.getFilteredObjetcs(type: SideQuestModel.self, key: (mainQuest?.mainQuestID)!)
-        
     }
     
     @IBAction func addSideQuest(_ sender: Any) {
@@ -34,11 +32,13 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Enter Second Name"
         }
+        
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
             RealmService.shared.saveObjects(obj: [SideQuestModel(title: firstTextField.text!, key: (self.mainQuest?.mainQuestID)!)])
             self.collectionView.reloadData()
         })
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (action : UIAlertAction!) -> Void in })
        
         alertController.addAction(saveAction)
@@ -60,7 +60,6 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         
         return cell
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
