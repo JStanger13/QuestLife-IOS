@@ -12,12 +12,9 @@ import RealmSwift
 class CreateMainQuestPopupViewController: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
-    //var user : UserModel?
-    //var users : Results <UserModel>!
     @IBOutlet weak var bossImage: UIImageView!
     @IBOutlet weak var bossLabel: UILabel!
     var boss: String?
-    //var uiRealm = (UIApplication.shared.delegate as! AppDelegate).uiRealm
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,20 +23,12 @@ class CreateMainQuestPopupViewController: UIViewController {
         bossLabel.text = boss!
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-
-    }
 
     @IBAction func createButton(_ sender: Any) {
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: "", time: "")])
-        print(textField.text)
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: "No Date ", time: "No Time")])
     }
-    
-    
 
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
-
     }
 }

@@ -1,4 +1,5 @@
 PODS:
+  - FSCalendar (2.7.9)
   - Realm (3.5.0):
     - Realm/Headers (= 3.5.0)
   - Realm/Headers (3.5.0)
@@ -6,17 +7,20 @@ PODS:
     - Realm (= 3.5.0)
 
 DEPENDENCIES:
+  - FSCalendar
   - RealmSwift
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - FSCalendar
     - Realm
     - RealmSwift
 
 SPEC CHECKSUMS:
+  FSCalendar: a04b09f16f811bc92e82f3cf852a15225233b9d5
   Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
   RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
 
-PODFILE CHECKSUM: a8d44eeb610ab1cbfd060c1fd28e8f61136cd39e
+PODFILE CHECKSUM: bfcd79a9f0572fd25f0774b8a990ed63ac2d926f
 
 COCOAPODS: 1.5.0

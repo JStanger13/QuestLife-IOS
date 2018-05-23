@@ -27,7 +27,6 @@ class MainQuestCell: UICollectionViewCell {
     
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var timeButton: UIButton!
-    
     @IBOutlet weak var deleteButton: UIButton!
     
     func Configure(with mainQuestModel: MainQuestModel){
@@ -39,13 +38,18 @@ class MainQuestCell: UICollectionViewCell {
     
     @IBAction func deleteButtonTapped(_ sender: Any) {
         delegate?.delete(cell: self)
+        print("DeleteDelegate")
+
     }
     
     @IBAction func dateButtonTapped(_ sender: Any) {
         delegate?.setDate(cell: self)
+        print("DateDelegate")
+
     }
     
     @IBAction func timeButtonTapped(_ sender: Any) {
         delegate?.setTime(cell: self)
+        print("TimeDelegate")
     }
 }

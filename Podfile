@@ -7,6 +7,8 @@ target 'QuestLife' do
 
   # Pods for QuestLife
 pod 'RealmSwift'
+pod 'FSCalendar'
+
 
   target 'QuestLifeTests' do
     inherit! :search_paths

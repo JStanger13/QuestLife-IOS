@@ -15,6 +15,7 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
     @IBOutlet weak var mainQuestSideLabel: UILabel!
     @IBOutlet weak var sideBossImage: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var sizeLabel: UILabel!
     
     var mainQuest: MainQuestModel?
     
@@ -24,11 +25,13 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         mainQuestSideLabel.text = mainQuest?.mainTitle
         sideBossImage.image = UIImage(named: (mainQuest?.mainBoss)!)
         bossNameLabel.text = mainQuest?.mainBoss
+    
         self.sideQuestList = RealmService.shared.getFilteredObjetcs(type: SideQuestModel.self, key: (mainQuest?.mainQuestID)!)
     }
     
     @IBAction func addSideQuest(_ sender: Any) {
         let alertController = UIAlertController(title: "Add New Name", message: "", preferredStyle: .alert)
+        
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Enter Second Name"
         }
@@ -36,14 +39,13 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
             RealmService.shared.saveObjects(obj: [SideQuestModel(title: firstTextField.text!, key: (self.mainQuest?.mainQuestID)!)])
+       
             self.collectionView.reloadData()
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (action : UIAlertAction!) -> Void in })
-       
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
-        
         self.present(alertController, animated: true, completion: nil)
     }
     
@@ -59,11 +61,6 @@ class SideQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         cell.Configure(with: sideQuest as! SideQuestModel)
         
         return cell
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 }

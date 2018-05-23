@@ -2,7 +2,7 @@
 //  TimePickerPopupViewController.swift
 //  QuestLife
 //
-//  Created by Justin Stanger on 5/14/18.
+//  Created by Justin Stanger on 5/23/18.
 //  Copyright © 2018 Justin Stanger. All rights reserved.
 //
 
@@ -10,44 +10,39 @@ import UIKit
 
 class TimePickerPopupViewController: UIViewController {
     var mainQuest: MainQuestModel?
+    var currentTime: String?
+
+    @IBOutlet weak var tPicker: UIDatePicker!
     @IBOutlet weak var timeLabel: UILabel!
     
-    @IBOutlet weak var timePicker: UIDatePicker!
-    
-    @IBAction func timeBackButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func setTimeButton(_ sender: Any) {
-        
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (mainQuest?.mainTitle)!, boss: (mainQuest?.mainBoss)!, date:(mainQuest?.mainDate)!, time: timeLabel.text!, key: (mainQuest?.mainQuestID)!)])
-    }
-    
-    @IBAction func timePickerAction(_ sender: Any) {
-       
-        var timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        var strTime = timeFormatter.string(from: timePicker.date)
-        self.timeLabel.text = strTime
- 
-        
-    }
-    
-    @IBOutlet weak var setTimeButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        mainQuest = Singleton.sharedInstance.mainQuest
-        var timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        var strTime = timeFormatter.string(from: timePicker.date)
-        self.timeLabel.text = strTime
-
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        self.mainQuest = Singleton.sharedInstance.mainQuest
+        currentTime = getDate(date: tPicker.date)
+        timeLabel.text = currentTime
     }
     
 
+    @IBAction func timePicker(_ sender: Any) {
+        currentTime = getDate(date: tPicker.date)
+        timeLabel.text = currentTime
+    }
+    
+    @IBAction func setTimeButtonTapped(_ sender: Any) {
+        
+        let mTitle = self.mainQuest?.mainTitle
+        let mBoss = self.mainQuest?.mainBoss
+        let mDate = self.mainQuest?.mainDate
+        let mTime = self.currentTime
+        let mKey = self.mainQuest?.mainQuestID
+        
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: mTitle!, boss: mBoss!, date: mDate!, time: mTime!, key: mKey!)])
+    }
+    
+    
+    func getDate(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH mm a"
+        return dateFormatter.string(from: date)
+    }
 }
