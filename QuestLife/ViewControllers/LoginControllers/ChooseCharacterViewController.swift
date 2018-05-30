@@ -14,7 +14,7 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
 
     @IBOutlet weak var avatarPickedImage: UIImageView!
     @IBOutlet weak var pickerView: UIPickerView!
-    let avatars = ["knight", "viking", "gnome", "girl-elf", "boy-elf", "prince", "wizard", "princess", "fairy"]
+    let avatars = ["Knight", "Viking", "Gnome", "Girl-Elf", "Boy-Elf", "Prince", "Wizard", "Princess", "Fairy"]
 
     @IBOutlet weak var avatarClassLabel: UILabel!
     
@@ -23,7 +23,7 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
     @IBAction func createButtonTapped(_ sender: Any) {
         let userClass = avatarClassLabel.text!
         //print(userClass)
-        let user = UserModel(userName: textField.text!, userClass: userClass)
+        let user = UserModel(userName: textField.text!, userClass: userClass, userLvl: 1, num: 0, den: 1)
         RealmService.shared.saveObjects(obj: [user])
 
         //Singleton.sharedInstance.user = user
@@ -37,7 +37,7 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
         createCharacterButton.isHidden = true
         textField.addTarget(self, action: #selector(ChooseCharacterViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
         
-        let realm = RealmService.shared.realm
+        //let realm = RealmService.shared.realm
         //users = realm.objects(UserModel.self)
 
     }
@@ -45,7 +45,6 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
     @IBOutlet weak var textField: UITextField!
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        print(textField.text)
         if (textField.text?.isEmpty)! {
             print("Empty")
 
@@ -81,3 +80,4 @@ class ChooseCharacterViewController: UIViewController, UIPickerViewDelegate, UIP
 
 
 }
+

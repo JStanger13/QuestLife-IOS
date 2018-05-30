@@ -23,10 +23,13 @@ class RealmService{
     func getObjetcs(type: Object.Type) -> Results<Object>?{
         return realm.objects(type)
     }
-    
+    //mainQuestID
     func getFilteredObjetcs(type: Object.Type, key: String) -> Results<Object>? {
         //let predicate = NSPredicate(format: "mainKey == %@", key)
         return realm.objects(type).filter("mainKey == %@", key)
+    }
+    func getFilteredMain(type: Object.Type, key: String) -> Results<Object>? {
+        return realm.objects(type).filter("mainQuestID == %@", key)
     }
     
     func deleteObjects(obj: [Object]){

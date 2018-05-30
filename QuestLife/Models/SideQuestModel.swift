@@ -12,6 +12,8 @@ import RealmSwift
 class SideQuestModel: Object{
     @objc dynamic var sideTitle: String?
     @objc dynamic var mainKey: String?
+    @objc dynamic var isChecked = false
+
 
     @objc dynamic var sideQuestID = UUID().uuidString
     
@@ -23,5 +25,12 @@ class SideQuestModel: Object{
         self.init()
         self.sideTitle = title
         self.mainKey = key
+    }
+    convenience init(title: String, key: String, id: String, checked: Bool) {
+        self.init()
+        self.sideTitle = title
+        self.mainKey = key
+        self.sideQuestID = id
+        self.isChecked = checked
     }
 }

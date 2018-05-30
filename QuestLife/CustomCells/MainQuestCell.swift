@@ -19,6 +19,8 @@ class MainQuestCell: UICollectionViewCell {
     
     weak var delegate: MainQuestCellDelegate?
     
+    
+    @IBOutlet weak var bossHealthProgressBar: UIProgressView!
     @IBOutlet weak var mainQuestTitleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var bossImage: UIImageView!
@@ -36,6 +38,7 @@ class MainQuestCell: UICollectionViewCell {
         timeLabel.text = mainQuestModel.mainTime
     }
     
+  
     @IBAction func deleteButtonTapped(_ sender: Any) {
         delegate?.delete(cell: self)
         print("DeleteDelegate")
@@ -52,4 +55,5 @@ class MainQuestCell: UICollectionViewCell {
         delegate?.setTime(cell: self)
         print("TimeDelegate")
     }
+        
 }

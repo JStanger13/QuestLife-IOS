@@ -14,7 +14,9 @@ class MainQuestModel: Object {
     @objc dynamic var mainBoss = ""
     @objc dynamic var mainDate = ""
     @objc dynamic var mainTime = ""
-    @objc dynamic var size = 0
+    @objc dynamic var mainSize = 0
+    @objc dynamic var sideQuestsComplete = "0"
+
     @objc dynamic var mainQuestID = UUID().uuidString
     
     override static func primaryKey() -> String? {
@@ -27,7 +29,7 @@ class MainQuestModel: Object {
         self.mainBoss = boss
         self.mainDate = date
         self.mainTime = time
-        self.size = 0
+        self.mainSize = 0
     }
     
     convenience init(title: String, boss: String, date: String, time: String, key: String) {
@@ -37,7 +39,7 @@ class MainQuestModel: Object {
         self.mainDate = date
         self.mainTime = time
         self.mainQuestID = key
-        self.size = 0
+        self.mainSize = 0
     }
     
     convenience init(title: String, boss: String, date: String, time: String, key: String, size: Int) {
@@ -47,6 +49,6 @@ class MainQuestModel: Object {
         self.mainDate = date
         self.mainTime = time
         self.mainQuestID = key
-        self.size = size
+        self.mainSize = size
     }
 }

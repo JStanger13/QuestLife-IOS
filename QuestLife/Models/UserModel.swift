@@ -14,16 +14,44 @@ class UserModel : Object{
     @objc dynamic var userName: String?
     var mainQuestList = List<MainQuestModel>()
     @objc dynamic var userID = UUID().uuidString
-
+    @objc dynamic var userLvl = 0
+    @objc dynamic var levelUpNumerator = 0
+    @objc dynamic var levelUpDenominator = 0
+    
+    func lvlString() -> String{
+        return String(self.userLvl)
+    }
+    
+    func getPercent()-> Float{
+        if levelUpDenominator == 0{
+            return Float(0)
+        }
+        return Float(Double(levelUpNumerator)/Double(levelUpDenominator))
+    }
+    
     override static func primaryKey() -> String? {
         return "userID"
     }
-    
-    convenience init(userName: String, userClass: String) {
-        self.init()
 
+    convenience init(userName: String, userClass: String, userLvl: Int, num: Int, den: Int) {
+        self.init()
+        
         self.userName = userName
         self.userClass = userClass
+        self.userLvl = userLvl
+        self.levelUpNumerator = num
+        self.levelUpDenominator = den
+    }
+    
+    convenience init(userName: String, userClass: String, userLvl: Int, id: String, num: Int, den: Int) {
+        self.init()
+        
+        self.userName = userName
+        self.userClass = userClass
+        self.userLvl = userLvl
+        self.userID = id
+        self.levelUpNumerator = num
+        self.levelUpDenominator = den
     }
 
 }

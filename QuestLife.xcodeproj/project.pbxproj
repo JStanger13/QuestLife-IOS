@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		405FA6CE0B0F2E02ADDBEBB1 /* Pods_QuestLifeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F9EEDFB1F1BE179D28B947 /* Pods_QuestLifeUITests.framework */; };
-		668CD74D20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CD74C20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift */; };
 		668CD75020AA30B50039DD30 /* DatePickerPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668CD74F20AA30B50039DD30 /* DatePickerPopupViewController.swift */; };
 		6692832320A6372E00BCD525 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832220A6372E00BCD525 /* UserModel.swift */; };
 		6692832520A64D5C00BCD525 /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6692832420A64D5C00BCD525 /* Singleton.swift */; };
@@ -62,7 +61,6 @@
 		2A975CFE7A9C2022E1A556D1 /* Pods_QuestLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuestLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F9287ED3FC18D9B949E8AB1 /* Pods_QuestLifeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuestLifeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4586F24ED8DDA252E1CB68F6 /* Pods-QuestLifeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuestLifeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuestLifeTests/Pods-QuestLifeTests.release.xcconfig"; sourceTree = "<group>"; };
-		668CD74C20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMainQuestPopupViewController.swift; sourceTree = "<group>"; };
 		668CD74F20AA30B50039DD30 /* DatePickerPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerPopupViewController.swift; sourceTree = "<group>"; };
 		6692832220A6372E00BCD525 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		6692832420A64D5C00BCD525 /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
@@ -181,7 +179,6 @@
 		668CD74920A9E2990039DD30 /* Popup View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				668CD74C20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift */,
 				668CD74F20AA30B50039DD30 /* DatePickerPopupViewController.swift */,
 				66C4226C20B620840055BA94 /* TimePickerPopupViewController.swift */,
 			);
@@ -519,7 +516,6 @@
 				668CD75020AA30B50039DD30 /* DatePickerPopupViewController.swift in Sources */,
 				6692832720A6515000BCD525 /* MainQuestViewController.swift in Sources */,
 				6692833A20A7FC2400BCD525 /* SideQuestCell.swift in Sources */,
-				668CD74D20A9E2D20039DD30 /* CreateMainQuestPopupViewController.swift in Sources */,
 				6692832320A6372E00BCD525 /* UserModel.swift in Sources */,
 				6692832520A64D5C00BCD525 /* Singleton.swift in Sources */,
 				66C4226D20B620840055BA94 /* TimePickerPopupViewController.swift in Sources */,
