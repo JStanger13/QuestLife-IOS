@@ -17,6 +17,8 @@ class UserModel : Object{
     @objc dynamic var userLvl = 0
     @objc dynamic var levelUpNumerator = 0
     @objc dynamic var levelUpDenominator = 0
+    @objc dynamic var isLevelUp = false
+
     
     func lvlString() -> String{
         return String(self.userLvl)
@@ -41,6 +43,7 @@ class UserModel : Object{
         self.userLvl = userLvl
         self.levelUpNumerator = num
         self.levelUpDenominator = den
+        self.isLevelUp = false
     }
     
     convenience init(userName: String, userClass: String, userLvl: Int, id: String, num: Int, den: Int) {
@@ -52,6 +55,20 @@ class UserModel : Object{
         self.userID = id
         self.levelUpNumerator = num
         self.levelUpDenominator = den
+        self.isLevelUp = false
+
+    }
+    
+    convenience init(userName: String, userClass: String, userLvl: Int, id: String, num: Int, den: Int, isLevelUp: Bool) {
+        self.init()
+        
+        self.userName = userName
+        self.userClass = userClass
+        self.userLvl = userLvl
+        self.userID = id
+        self.levelUpNumerator = num
+        self.levelUpDenominator = den
+        self.isLevelUp = isLevelUp
     }
 
 }

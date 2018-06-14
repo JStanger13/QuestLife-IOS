@@ -9,90 +9,156 @@
 import UIKit
 import RealmSwift
 import FSCalendar
+import AVFoundation
+import AudioToolbox.AudioServices
 
-
-class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, FSCalendarDataSource, FSCalendarDelegate {
+class MainQuestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FSCalendarDataSource, FSCalendarDelegate {
     
-    var currentIndex: Int?
-    @IBOutlet weak var dimView: UIView!
-    @IBOutlet var timePopupView: UIView!
-    @IBOutlet var deletePopupView: UIView!
+    let vibrate = SystemSoundID(kSystemSoundID_Vibrate)
+    
+    //Heptic Feedback
+    let lightImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    let mediumImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium) //Do I need this?
+    let heavyImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    
+    //set up sound effects
+    var soundEffect: AVAudioPlayer? //Do I Need This?
 
+    @IBOutlet weak var deleteQuestLabel: UILabel!
+    @IBOutlet weak var textField: UITextField!
+ 
+    //Main Outlets
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var dimView: UIView!
+
+    //Transparent White Views
     @IBOutlet weak var timeViewTransparentWhite: UIView!
     @IBOutlet weak var deleteViewTransparentWhite: UIView!
+    @IBOutlet weak var levelUpTransparentWhite: UIView!
     @IBOutlet weak var datePopUpViewTransparentWhite: UIView!
+    @IBOutlet weak var createMainQuestTransparentWhite: UIView!
     
-    @IBOutlet weak var lvlLabel: UILabel!
+    //PopupViews
+    @IBOutlet var createMainQuestPopupView: UIView!
+    @IBOutlet var timePopupView: UIView!
+    @IBOutlet var deletePopupView: UIView!
+    @IBOutlet var levelUpPopUpView: UIView!
+
+    //Set Buttons
     @IBOutlet weak var timeSetButton: UIButton!
     @IBOutlet weak var timeBackButton: UIButton!
-    
     @IBOutlet weak var timePicker: UIDatePicker!
+
+    //User Info View
+    @IBOutlet weak var userProgressBar: UIProgressView!
+    @IBOutlet weak var datePopUpView: UIView!
+    @IBOutlet weak var youHaveLeveledUpLabel: UILabel!
+    @IBOutlet weak var bossImage: UIImageView!
+    @IBOutlet weak var bossLabel: UILabel!
+    @IBOutlet weak var lvlLabel: UILabel!
+    
+    @IBOutlet weak var percentLabel: UILabel!
+    @IBOutlet weak var smallAvatarLvlUpImage: UIView!
+    @IBOutlet weak var bigAvatarLvlUpImage: UIImageView!
+    
+    
+    @IBOutlet var editDateView: UIView!
+    @IBOutlet weak var editDateTransparentWhite: UIView!
+    
+    //Buttons
+    @IBOutlet weak var setDateButton: UIButton!
     @IBOutlet weak var userClassLabel: UILabel!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var avatarIcon: UIImageView!
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var addQuestButton: UIButton!
+    @IBOutlet weak var questSetButton: UIButton!
     
-    @IBOutlet weak var setDateButton: UIButton!
-
-    
-    //Create Main Quest PopupView
-    @IBOutlet var createMainQuestPopupView: UIView!
-    @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var bossImage: UIImageView!
-    @IBOutlet weak var bossLabel: UILabel!
-    
+    //Vars
+    var currentIndex: Int?
     var boss: String?
     var currentDate: String?
-
-    
-    @IBOutlet weak var userProgressBar: UIProgressView!
-    
-    @IBOutlet weak var datePopUpView: UIView!
-    
     var user : UserModel?
     var users : Results <UserModel>!
     var mainQuestList : Results<Object>!
+    var reversedQuestList : Results<Object>!
     var currentMain : MainQuestModel?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.reloadData()
-        let realm = RealmService.shared.realm
-        users = realm.objects(UserModel.self)
-        user = users[0]
+        
+        PopUpViewService.setUpTextField(textField: textField)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(MainQuestViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MainQuestViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        //Set Up TableView style attributes
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        tableView.bounces = false
+        
+        //Get User Info
+        loadFromRealm()
+        setUpUserLabels()
+
+        //Determines When To Launch "LEVEL UP" PopupView
+        isLevelUp()
+        
+        //Set Up Nav Bar Style Attributes
         self.navigationItem.title = "MainQuests"
-       
-    
-
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "CloisterBlack-Light", size: 30.0)!, NSAttributedStringKey.foregroundColor: UIColor.white]
+    }
 
-        
-        UITabBar.appearance().shadowImage = UIImage(named: "cobblestone_bar")
-        UITabBar.appearance().barTintColor = UIColor.clear
-        UITabBar.appearance().layer.borderWidth = 0.50
-        UITabBar.appearance().clipsToBounds = true
-        
-        self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
-        self.collectionView.reloadData()
+    func setUpUserLabels(){
+        self.lvlLabel.text = "Level: \(user!.lvlString())"
+        self.userProgressBar.progress = (user?.getPercent())!
+        self.percentLabel.text = "\((Int((user?.getPercent())! * 100)).description)%"
         let userClassString = user?.userClass
         avatarIcon.image = UIImage(named: userClassString!)
         userClassLabel.text = userClassString
         userNameLabel.text = user?.userName
         self.lvlLabel.text = "Level: \(user!.lvlString())"
-
         self.userProgressBar.progress = (user?.getPercent())!
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.collectionView.reloadData()
-        self.lvlLabel.text = "Level: \(user!.lvlString())"
-        self.userProgressBar.progress = (user?.getPercent())!
-        
+    func loadFromRealm(){
+        let realm = RealmService.shared.realm
+        users = realm.objects(UserModel.self)
+        user = users[0]
+        self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    //TableView Methods-------------------------------------------------------------------------------------
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MainQuestCell", for: indexPath) as? MainQuestCell else { return UITableViewCell() }
+        let mainQuest = mainQuestList.reversed()[indexPath.row]
+        cell.Configure(with: mainQuest as! MainQuestModel)
+        cell.delegate = self
+    
+        cell.selectionStyle = .none
+
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if mainQuestList == nil{
+            return 0
+        }else{
+            return (mainQuestList.count)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = mainQuestList[(mainQuestList.count - indexPath.row) - 1]
         
+        Singleton.sharedInstance.mainQuest = item as? MainQuestModel
+        Singleton.sharedInstance.row = (mainQuestList.count - indexPath.row) - 1
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "sideQuestSegue" {
-            if let childViewController = segue.destination as? SideQuestViewController {
+            if segue.destination is SideQuestViewController {
+                PopUpViewService.playSound(sound: "pop-sound.aiff")
                 let backItem = UIBarButtonItem()
                 backItem.title = ""
                 navigationItem.backBarButtonItem = backItem
@@ -100,285 +166,267 @@ class MainQuestViewController: UIViewController, UICollectionViewDelegate, UICol
         }
     }
     
-    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        currentDate = getDate(date: date)
-        self.setDateButton.isHidden = false
+    //Keyboard
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height/2.8
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y = 0
+            }
+        }
+    }
+    
+    //Launch Popup Views------------------------------------------------------------------------------------
+        //Check If User Levels Up
+    func isLevelUp(){
+        if (user?.isLevelUp)!{
+            launchLevelUpPopUpView()
+        }else{
+            //do nothing
+        }
+    }
+    @IBOutlet weak var lvlUpAvatarImage: UIImageView!
+    
+    //Level Up PopUp View-------------------------------------------------------------------------------------
+    func launchLevelUpPopUpView(){
+        PopUpViewService.setUpPopUpView(popUpView: levelUpPopUpView, transparentePopUpView: createMainQuestTransparentWhite, mView: view, mDimView: dimView)
+    self.bigAvatarLvlUpImage.image = UIImage(named: (self.user?.userClass!)!)
+    self.lvlUpAvatarImage.image = UIImage(named: (self.user?.userClass!)!)
+        bigAvatarLvlUpImage.isHidden = true
+
+        //Make Into Method
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            AudioServicesPlaySystemSound(self.vibrate)
+            
+            PopUpViewService.playSound(sound: "level_up.mp3")
+            self.lvlUpAvatarImage.image = UIImage(named: (self.user?.userClass!)!)
+            self.lvlUpAvatarImage.blink()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                self.lvlUpAvatarImage.isHidden = true
+                self.bigAvatarLvlUpImage.isHidden = false
+            }
+        }
+        
+        //Save User LevelUp Info
+        RealmService.shared.saveObjects(obj: [UserModel(userName: (user?.userName)!, userClass: (user?.userClass)!, userLvl: (user?.userLvl)!, id: (user?.userID)!, num: (user?.levelUpNumerator)!, den: (user?.levelUpDenominator)!, isLevelUp: false)])
+        
+        //Setup View Attributes
+        PopUpViewService.setUpPopUpView(popUpView: levelUpPopUpView, transparentePopUpView: levelUpTransparentWhite, mView: view, mDimView: dimView)
+        
+        //Tell User What Level They Have Reached
+        self.youHaveLeveledUpLabel.text = "You have reached level \(user!.lvlString())."
     }
     
     
+    //Add Main Qust PopUp View--------------------------------------------------------------------------------
     @IBAction func addMainQuestButton(_ sender: Any) {
+        heavyImpactFeedbackGenerator.impactOccurred()
+
+        //Generate A New Boss
         self.boss = BossService.generateBoss(num: Int(arc4random_uniform(26)))
         bossImage.image = UIImage(named: boss!)
-        bossLabel.text = boss!
+        bossLabel.text = "Defeat the \(boss!)"
         
-        createMainQuestPopupView.center = view.center
-        createMainQuestPopupView.transform = CGAffineTransform(scaleX: 0.8, y: 1.2)
-        view.addSubview(createMainQuestPopupView)
+        //Set Up Pop-Up View
+        PopUpViewService.setUpPopUpView(popUpView: createMainQuestPopupView, transparentePopUpView: createMainQuestTransparentWhite, mView: view, mDimView: dimView)
         
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0.8
-            self.createMainQuestPopupView.transform = .identity
-        })
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.8
-            //self.deletePopupView.transform = .identity
-        })
+        PopUpViewService.setUpTextField(textField: textField)
+        self.questSetButton.isHidden = true
+        textField.addTarget(self, action: #selector(checkUserInputInTextField), for: .editingChanged)
+    }
+    
+    
+    //BackButtons------------------------------------------------------------------------------------------
+    @IBAction func backLvlUpButton(_ sender: Any) {
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: levelUpPopUpView, mDimView: dimView)
     }
     
     @IBAction func backButton(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.createMainQuestPopupView.removeFromSuperview()
-            self.timePopupView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.timePopupView.removeFromSuperview()
-        }
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: createMainQuestPopupView, mDimView: dimView)
+        PopUpViewService.setUpTextField(textField: textField)
     }
     
     @IBAction func backDateButton(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.datePopUpView.removeFromSuperview()
-            self.datePopUpView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.datePopUpView.removeFromSuperview()
-        }
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
-    }
-    
-    @IBAction func deleteNo(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.deletePopupView.removeFromSuperview()
-            self.timePopupView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.timePopupView.removeFromSuperview()
-        }
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
-    }
-    @IBAction func deleteYes(_ sender: Any) {
-       
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.deletePopupView.removeFromSuperview()
-            self.timePopupView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.timePopupView.removeFromSuperview()
-        }
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
-        
-        let item = mainQuestList[currentIndex!]
-        RealmService.shared.deleteObjects(obj: [item])
-        collectionView.reloadData()
-    }
-    
-    
-    @IBAction func createButton(_ sender: Any) {
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: "No Date ", time: "No Time")])
-        
-        self.collectionView.reloadData()
-        //self.dimView.alpha = 0
-        self.createMainQuestPopupView.removeFromSuperview()
-        self.textField.text = ""
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: datePopUpView, mDimView: dimView
+        )
     }
     
     @IBAction func timeBack(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.timePopupView.removeFromSuperview()
-            self.timePopupView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.timePopupView.removeFromSuperview()
-        }
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: timePopupView, mDimView: dimView
+        )
+    }
+    
+    @IBAction func deleteNo(_ sender: Any) {
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: deletePopupView, mDimView: dimView
+        )
+    }
+    
+    @IBAction func deleteYes(_ sender: Any) {
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: deletePopupView, mDimView: dimView)
+
+        let item = mainQuestList[currentIndex!]
+        RealmService.shared.deleteObjects(obj: [item])
+        tableView.reloadData()
+    }
+    
+    
+    //Set Buttons------------------------------------------------------------------------------------------
+    @IBAction func createButton(_ sender: Any) {
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: createMainQuestPopupView, mDimView: dimView)
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: textField.text!, boss: boss!, date: " ", time: " ")])
+        
+        self.tableView.reloadData()
+        
+        PopUpViewService.setUpTextField(textField: textField)
+        
     }
     
     @IBAction func timeSet(_ sender: Any) {
         
-        let mTitle = self.currentMain?.mainTitle
-        let mBoss = self.currentMain?.mainBoss
-        let mDate = self.currentMain?.mainDate
-        let mTime = getTime(date: self.timePicker.date)
-        let mKey = self.currentMain?.mainQuestID
-        
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: mTitle!, boss: mBoss!, date: mDate!, time: mTime, key: mKey!)])
-        
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.timePopupView.removeFromSuperview()
-            self.timePopupView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.timePopupView.removeFromSuperview()
-        }
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
-        
-        self.collectionView.reloadData()
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (self.currentMain?.mainTitle)!, boss: (self.currentMain?.mainBoss)!, date:  (self.currentMain?.mainDate)!, time: getDate(date: self.timePicker.date, type: "time"), key: (self.currentMain?.mainQuestID)!)])
+        print(getDate(date: self.timePicker.date, type: "time"))
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: timePopupView, mDimView: dimView)
+    
+        self.tableView.reloadData()
     }
     
     @IBAction func setDateButtonTapped(_ sender: Any) {
-        let mTitle = self.currentMain?.mainTitle
-        let mBoss = self.currentMain?.mainBoss
-        let mDate = self.currentDate
-        let mTime = self.currentMain?.mainTime
-        let mKey = self.currentMain?.mainQuestID
-        
-        
+       
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (self.currentMain?.mainTitle)!, boss: (self.currentMain?.mainBoss)!, date: currentDate!, time: (self.currentMain?.mainTime)!, key: (self.currentMain?.mainQuestID)!)])
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: datePopUpView, mDimView: dimView)
+        self.tableView.reloadData()
+        print("Set Button: \(String(describing: currentDate!))")
+
+    }
     
-        RealmService.shared.saveObjects(obj: [MainQuestModel(title: mTitle!, boss: mBoss!, date: mDate!, time: mTime!, key: mKey!)])
-        
-        
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            //self.dimView.alpha = 0
-            self.datePopUpView.removeFromSuperview()
-            self.datePopUpView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
-        }){(success) in
-            self.datePopUpView.removeFromSuperview()
+    
+    //Get Methods for Time & Date------------------------------------------------------------------------------
+    
+    //Condense Into One Method!!!!!!
+   
+   
+    func getDate(date: Date, type: String) -> String{
+        let dateFormatter = DateFormatter()
+
+        if type.contains("time"){
+            dateFormatter.dateFormat = "h mm a"
+        } else {
+            dateFormatter.dateFormat = "MM/dd/yyyy"
         }
-        self.collectionView.reloadData()
-        UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-            self.dimView.alpha = 0.0
-            //self.deletePopupView.transform = .identity
-        })
-    }
-    
-    func getTime(date: Date) -> String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "h mm a"
-        return dateFormatter.string(from: date)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (mainQuestList.count)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainQuestCell", for: indexPath) as? MainQuestCell else { return UICollectionViewCell() }
-        let mainQuest = mainQuestList[indexPath.row]
-        cell.Configure(with: mainQuest as! MainQuestModel)
-        cell.delegate = self
-        
-        return cell
-    }
-    
-    func getDate(date: Date) -> String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy"
         setDateButton.isHidden = false
         return dateFormatter.string(from: date)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = mainQuestList[indexPath.row]
-        
-      
-        Singleton.sharedInstance.mainQuest = item as? MainQuestModel
-        Singleton.sharedInstance.row = indexPath.row
-    }
   
+
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        currentDate = getDate(date: date, type: "date")
+        print("Date: \(currentDate as Any)")
+        PopUpViewService.playSound(sound: "pop-sound.aiff")
+    }
+    
     @objc func saveCurrentMainQuest(sender: UIButton){
         Singleton.sharedInstance.mainQuest =  mainQuestList[sender.tag] as? MainQuestModel
     }
-    
     
     func minimumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
 }
 
-
 extension MainQuestViewController : MainQuestCellDelegate {
    
     func setDate(cell: MainQuestCell) {
-       
-        if let indexPath = collectionView?.indexPath(for: cell){
-            currentMain = mainQuestList[indexPath.row] as! MainQuestModel
-            datePopUpView.center = view.center
-            datePopUpView.layer.cornerRadius = 10
-            datePopUpView.layer.masksToBounds = true
-            datePopUpViewTransparentWhite.layer.cornerRadius = 5
-            datePopUpView.transform = CGAffineTransform(scaleX: 0.8, y: 1.2)
-            view.addSubview(datePopUpView)
-            self.setDateButton.isHidden = true
+        lightImpactFeedbackGenerator.impactOccurred()
 
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-                //self.dimView.alpha = 0.8
-                self.datePopUpView.transform = .identity
-            })
-            UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-                self.dimView.alpha = 0.8
-                //self.deletePopupView.transform = .identity
-            })
+        if let indexPath = tableView?.indexPath(for: cell){
+            
+            currentMain = mainQuestList.reversed()[indexPath.row] as? MainQuestModel
+            if (currentMain?.mainDate.trimmingCharacters(in: .whitespaces).isEmpty)!{
+                PopUpViewService.setUpPopUpView(popUpView:datePopUpView , transparentePopUpView: datePopUpViewTransparentWhite, mView: view, mDimView: dimView)
+                self.setDateButton.isHidden = true
+            }else{
+                cell.dateButtonImage.image = UIImage(named:"white_calendar")
+                PopUpViewService.playSound(sound: "pop-sound.aiff")
+                   RealmService.shared.saveObjects(obj: [MainQuestModel(title: (self.currentMain?.mainTitle)!, boss: (self.currentMain?.mainBoss)!, date: "", time: (self.currentMain?.mainTime)!, key: (self.currentMain?.mainQuestID)!)])
+            }
         }
+        tableView.reloadData()
     }
     
     func setTime(cell: MainQuestCell) {
-        if let indexPath = collectionView?.indexPath(for: cell){
-            currentMain = mainQuestList[indexPath.row] as! MainQuestModel
-            timePopupView.center = view.center
-            timePopupView.layer.cornerRadius = 10
-            timePopupView.layer.masksToBounds = true
-            timeViewTransparentWhite.layer.cornerRadius = 5
-            timePopupView.transform = CGAffineTransform(scaleX: 0.8, y: 1.2)
-            view.addSubview(timePopupView)
-            
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-                //self.dimView.alpha = 0.8
-                self.timePopupView.transform = .identity
-            })
-            UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-                self.dimView.alpha = 0.8
-                //self.deletePopupView.transform = .identity
-            })
+        lightImpactFeedbackGenerator.impactOccurred()
+        if let indexPath = tableView?.indexPath(for: cell){
+            currentMain = mainQuestList.reversed()[indexPath.row] as? MainQuestModel
+            if (currentMain?.mainTime.trimmingCharacters(in: .whitespaces).isEmpty)!{
+                PopUpViewService.setUpPopUpView(popUpView:timePopupView, transparentePopUpView: timeViewTransparentWhite, mView: view, mDimView: dimView)
+            }else{
+                cell.timeButtonImage.image = UIImage(named:"white_calendar")
+                PopUpViewService.playSound(sound: "pop-sound.aiff")
+                RealmService.shared.saveObjects(obj: [MainQuestModel(title: (self.currentMain?.mainTitle)!, boss: (self.currentMain?.mainBoss)!, date: (self.currentMain?.mainDate)!, time: "", key: (self.currentMain?.mainQuestID)!)])
+            }
         }
+        tableView.reloadData()
     }
     
     func delete(cell: MainQuestCell) {
-        if let indexPath = collectionView?.indexPath(for: cell){
-            //currentMain = mainQuestList[indexPath.row] as! MainQuestModel
-            currentIndex = indexPath.row
-            deletePopupView.center = view.center
-            deletePopupView.transform = CGAffineTransform(scaleX: 0.8, y: 1.2)
-            deletePopupView.layer.cornerRadius = 10
-            deleteViewTransparentWhite.layer.masksToBounds = true
-            deleteViewTransparentWhite.layer.cornerRadius = 5
-            view.addSubview(deletePopupView)
+        if let indexPath = tableView?.indexPath(for: cell){
+            lightImpactFeedbackGenerator.impactOccurred()
+
+            let currentMain = mainQuestList.reversed()[indexPath.row] as? MainQuestModel
+            var completedSideQuestList : Results<Object>!
+            let verb: String!
+            let still: String!
+            var sideQuestList : Results<Object>!
+            currentIndex = (mainQuestList.count - indexPath.row) - 1
             
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-                //self.dimView.alpha = 0.8
-                self.deletePopupView.transform = .identity
-            })
+            PopUpViewService.setUpPopUpView(popUpView: deletePopupView, transparentePopUpView: deleteViewTransparentWhite, mView: view, mDimView: dimView)
+
+            sideQuestList = RealmService.shared.getFilteredObjetcs(type: SideQuestModel.self, key: (currentMain!.mainQuestID))
             
-            UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
-                self.dimView.alpha = 0.8
-                //self.deletePopupView.transform = .identity
-            })
+            completedSideQuestList = sideQuestList?.filter("isChecked == %@", true)
             
+            let sideQuestsLeft = sideQuestList.count - completedSideQuestList.count
+            if sideQuestsLeft == 0 {
+                still = " "
+            }else{
+                still = " still "
+            }
+            if sideQuestsLeft == 1 {
+                verb = "SideQuest"
+            }else{
+                verb = "SideQuests"
+            }
+
+            deleteQuestLabel.text = "Are you sure you want to delete this quest? You\(still!)have \(String(sideQuestsLeft)) \(verb!) left to complete!"
         }
     }
+    
+    @objc func checkUserInputInTextField(){
+        PopUpViewService.animateFadeInView(viewIsHidden: (textField.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: questSetButton)
+    }
 }
+
+extension UIView{
+    func blink() {
+        self.alpha = 0.0
+        UIView.animate(withDuration: 0.01, delay: 0.0, options: [.curveLinear, .repeat, .autoreverse], animations: {self.alpha = 1.0}, completion: nil)
+    }
+    
+    func mainFadeIn(_ duration: TimeInterval = 0.5, delay: TimeInterval = 0.0, completion: @escaping ((Bool) -> Void) = {(finished: Bool) -> Void in}) {
+        UIView.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseIn, animations: {
+            self.alpha = 1.0
+        }, completion: completion)
+    }
+}
+
 
 
 

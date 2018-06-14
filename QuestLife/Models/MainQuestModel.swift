@@ -17,6 +17,7 @@ class MainQuestModel: Object {
     @objc dynamic var mainSize = 0
     @objc dynamic var sideQuestsComplete = "0"
 
+
     @objc dynamic var mainQuestID = UUID().uuidString
     
     override static func primaryKey() -> String? {

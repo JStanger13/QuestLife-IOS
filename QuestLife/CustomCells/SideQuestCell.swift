@@ -12,35 +12,30 @@ protocol SideQuestCellDelegate: class {
     func delete(cell: SideQuestCell)
   }
 
-class SideQuestCell: UICollectionViewCell {
+class SideQuestCell: UITableViewCell {
     weak var delegate: SideQuestCellDelegate?
+    @IBOutlet weak var outsideView: UIView!
+    @IBOutlet weak var insideView: UIView!
 
     @IBOutlet weak var checkBox: Checkbox!
     @IBOutlet weak var sideQuestTitleLabel: UILabel!
     
     @IBOutlet weak var sideQuestDeleteButton: UIButton!
+    @IBOutlet weak var whiteGarbageView: UIImageView!
+
+    @IBOutlet weak var strikethrough: UIProgressView!
     
-  
     func Configure(with sideQuestModel: SideQuestModel){
         sideQuestTitleLabel.text = sideQuestModel.sideTitle
+        outsideView.layer.cornerRadius = 10
+
         if sideQuestModel.isChecked == true{
             checkBox.isChecked = true
-        
-            let text = sideQuestModel.sideTitle
-            let textRange = NSMakeRange(0, (text?.count)!)
-            let attributedText = NSMutableAttributedString(string: text!)
-            attributedText.addAttribute(NSAttributedStringKey.strikethroughStyle,
-                                        value: NSUnderlineStyle.styleSingle.rawValue,
-                                        range: textRange)
-            sideQuestTitleLabel.attributedText = attributedText
-            sideQuestTitleLabel.textColor = .red
-          
-
-            //sideQuestTitleLabel.text
+            strikethrough.progress = 1.0
+            strikethrough.animate(duration: 0.1)
         } else{
             checkBox.isChecked = false
-            sideQuestTitleLabel.textColor = .black
-        
+            strikethrough.progress = 0.0
         }
         checkBox.borderStyle = .circle
         checkBox.checkmarkStyle = .circle
@@ -49,7 +44,7 @@ class SideQuestCell: UICollectionViewCell {
     
     @IBAction func deleteButtonTapped(_ sender: Any) {
         delegate?.delete(cell: self)
-
     }
 }
+
 
