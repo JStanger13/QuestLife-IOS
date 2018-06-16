@@ -10,6 +10,7 @@ import UIKit
 
 protocol SideQuestCellDelegate: class {
     func delete(cell: SideQuestCell)
+    func edit(cell: SideQuestCell)
   }
 
 class SideQuestCell: UITableViewCell {
@@ -22,12 +23,13 @@ class SideQuestCell: UITableViewCell {
     
     @IBOutlet weak var sideQuestDeleteButton: UIButton!
     @IBOutlet weak var whiteGarbageView: UIImageView!
+    @IBOutlet weak var whiteEditView: UIImageView!
+
 
     @IBOutlet weak var strikethrough: UIProgressView!
     
     func Configure(with sideQuestModel: SideQuestModel){
         sideQuestTitleLabel.text = sideQuestModel.sideTitle
-        outsideView.layer.cornerRadius = 10
 
         if sideQuestModel.isChecked == true{
             checkBox.isChecked = true
@@ -45,6 +47,8 @@ class SideQuestCell: UITableViewCell {
     @IBAction func deleteButtonTapped(_ sender: Any) {
         delegate?.delete(cell: self)
     }
+    
+    @IBAction func editButtonTapped(_ sender: Any) {
+        delegate?.edit(cell: self)
+    }
 }
-
-

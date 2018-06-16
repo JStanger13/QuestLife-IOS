@@ -13,11 +13,9 @@ import AudioToolbox.AudioServices
 
 class SideQuestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    //Heptic Feedback
-    let lightImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    let mediumImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium) //Do I need this?
-    let heavyImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-    
+    var navBar: UINavigationBar = UINavigationBar()
+    var playSlashSound = false
+
     //Outlets
     //Main Outlets
     @IBOutlet weak var bossNameLabel: UILabel!
@@ -30,10 +28,9 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var completedNumberLabel: UILabel!
     @IBOutlet weak var progressView: UIProgressView!
     
-    
     @IBOutlet var deleteSideQuestView: UIView!
     @IBOutlet weak var deleteSideQuestViewTransparentWhite: UIView!
-    
+
     //Quest Complete Outlets
     @IBOutlet weak var slayedBossImage: UIImageView!
     
@@ -43,7 +40,14 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var textView: UITextField!
     @IBOutlet var missionCompleteView: UIView!
     
-   
+    //Edit View
+    
+    @IBOutlet weak var editSaveButtonOutlet: UIButton!
+    @IBOutlet var editView: UIView!
+    
+    @IBOutlet weak var editLabel: UILabel!
+    @IBOutlet weak var editTextField: UITextField!
+    
     //Vars
     let vibrate = SystemSoundID(kSystemSoundID_Vibrate)
     var mainQuest: MainQuestModel?
@@ -55,14 +59,20 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     var currentSide : SideQuestModel?
 
     
+    @IBOutlet weak var okayButtonOutlet: UIButton!
     @IBOutlet weak var deleteQuestLabel: UILabel!
     @IBOutlet weak var saveQuestButton: UIButton!
+    
+    
+    
+    @IBOutlet weak var editViewTransparentWhite: UIView!
+    
+    
     
     //Functions------------------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        PopUpViewService.setUpTextField(textField: textView)
+    
         //rename to TextField
         
         NotificationCenter.default.addObserver(self, selector: #selector(SideQuestViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -76,6 +86,15 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         bossNameLabel.text = "\(mainQuest?.mainBoss ?? "-")"
         
         getBossHealth()
+    }
+    
+    override func viewWillDisappear(_ animated : Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParentViewController {
+            PopUpViewService.playSound(sound: "pop-sound.aiff")
+            PopUpViewService.hepticFeedback(type: "light")
+        }
     }
     
     //TableView-----------------------------------------------------------------------------------------------
@@ -93,7 +112,7 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         let sideQuest = sideQuestList[indexPath.row]
         cell.Configure(with: sideQuest as! SideQuestModel)
         
-        setUpGarbageViewAnimation(cell: cell)
+        setUpViewAnimations(cell: cell)
         
         cell.checkBox.tag = indexPath.row
         cell.checkBox.addTarget(self, action: #selector(checkboxValueChanged(sender:)), for: .valueChanged)
@@ -123,8 +142,9 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         missionComplete()
     }
 
-    func setUpGarbageViewAnimation(cell: SideQuestCell ){
+    func setUpViewAnimations(cell: SideQuestCell ){
         PopUpViewService.animateFadeInView(viewIsHidden: cell.checkBox.isChecked, view: cell.whiteGarbageView)
+        PopUpViewService.animateFadeInView(viewIsHidden: cell.checkBox.isChecked, view: cell.whiteEditView)
     }
     
     func missionComplete(){
@@ -154,6 +174,9 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 PopUpViewService.setUpPopUpView(popUpView: self.missionCompleteView, transparentePopUpView: self.missionCompleteViewTransparentWhite, mView: self.view, mDimView: self.dimView)
+            }
+             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.okayButtonOutlet.fadeIn()
             }
             users = RealmService.shared.getObjetcs(type: UserModel.self)
             user = users[0] as? UserModel
@@ -185,6 +208,11 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
+    @objc func cancelTapped (){
+        PopUpViewService.hepticFeedback(type: "light")
+        PopUpViewService.playSound(sound: "pop_sound.aiff")
+    }
+    
     //Keyboard--------------------------------------------------------------------------------------------
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -204,26 +232,39 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     
     let date = Date().addingTimeInterval(5)
     
-    
     //Button Actions--------------------------------------------------------------------------------------------
     @IBAction func addSideQuest(_ sender: Any) {
-        
+        PopUpViewService.setUpTextField(textField: textView)
         PopUpViewService.setUpPopUpView(popUpView: addSideQuestView, transparentePopUpView: addSideTransparentWhite, mView: view, mDimView: dimView)
         
         heavyImpactFeedbackGenerator.impactOccurred()
         
         self.saveQuestButton.isHidden = true//Do I Need This?
         textView.addTarget(self, action: #selector(checkUserInputInTextField), for: .editingChanged)
-
     }
+    
+ 
     
     
     //Back Buttons----------------------------------------------------------------------------------------------
     @IBAction func okayButton(_ sender: Any) {
         PopUpViewService.setBackButtonInUpPopUpView(popUpView: missionCompleteView, mDimView: dimView)
-        
         let item = mainQuest
         RealmService.shared.deleteObjects(obj: [item!])
+    }
+  
+    @IBAction func editViewBackButtonAction(_ sender: Any) {
+        editSaveButtonOutlet.alpha = 0.0
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: editView, mDimView: dimView)
+        
+    }
+    
+    //Fix
+    @IBAction func editAveButtonSetAction(_ sender: Any) {
+        RealmService.shared.saveObjects(obj: [SideQuestModel(title: (editTextField.text)!, key: (currentSide?.mainKey)!, id: (currentSide?.sideQuestID)! , checked: (currentSide?.isChecked)!)])
+        
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: editView, mDimView: dimView)
+        tableView.reloadData()
     }
     
     @IBAction func submitSideQuestButton(_ sender: Any) {
@@ -243,12 +284,15 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBAction func deleteQuestBackButtonAction(_ sender: Any) {
         PopUpViewService.setBackButtonInUpPopUpView(popUpView: deleteSideQuestView, mDimView: dimView)
     }
+    
     @IBAction func deleteQuestSetButtonAction(_ sender: Any) {
         PopUpViewService.setBackButtonInUpPopUpView(popUpView: deleteSideQuestView, mDimView: dimView)
         RealmService.shared.deleteObjects(obj: [currentSide!])
         getBossHealth()
         tableView.reloadData()
-        PopUpViewService.playSound(sound: "pop-sound.aiff")
+        if playSlashSound == true{
+            PopUpViewService.playSound(sound: "slash.wav")
+        }   
     }
     
     @objc func checkboxValueChanged(sender: Checkbox) {
@@ -271,15 +315,34 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func checkUserInputInTextField(){
         PopUpViewService.animateFadeInView(viewIsHidden: (textView.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: saveQuestButton)
     }
+    @objc func checkEditViewUserInputInTextField(){
+        PopUpViewService.animateFadeInView(viewIsHidden: (editTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: editSaveButtonOutlet)
+    }
 }
 //Extentions--------------------------------------------------------------------------------------------------
 extension SideQuestViewController : SideQuestCellDelegate {
+    func edit(cell: SideQuestCell) {
+        PopUpViewService.setUpTextField(textField: editTextField)
+        PopUpViewService.hepticFeedback(type: "medium")
+
+        if let indexPath = tableView?.indexPath(for: cell){
+            currentSide = sideQuestList[indexPath.row] as? SideQuestModel
+            editLabel.text = currentSide!.sideTitle!
+              PopUpViewService.setUpPopUpView(popUpView: editView, transparentePopUpView: editViewTransparentWhite, mView: view, mDimView: dimView)
+            PopUpViewService.setUpTextField(textField: editTextField)
+            self.editTextField.addTarget(self, action: #selector(checkEditViewUserInputInTextField), for: .editingChanged)
+        }
+    }
+    
     func delete(cell: SideQuestCell) {
+        PopUpViewService.hepticFeedback(type: "medium")
+
         if let indexPath = tableView?.indexPath(for: cell){
             let deleteMessage = "Are you sure you want to delete this SideQuest?"
             
-            if (sideQuestList.count - completedSideQuestList.count) == 1 && completedSideQuestList.count > 0 { 
-            deleteQuestLabel.text = "\(deleteMessage) Deleting this item on your list will complete your Quest. If you desire to add more item on this list, add more SideQuests First!"
+            if (sideQuestList.count - completedSideQuestList.count) == 1 && completedSideQuestList.count > 0 {
+                playSlashSound = true
+                deleteQuestLabel.text = "\(deleteMessage) Deleting this item on your list will complete your Quest and defeat the \((mainQuest?.mainBoss)!)!"
             } else {
                  deleteQuestLabel.text = deleteMessage
             }

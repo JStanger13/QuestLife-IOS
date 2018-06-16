@@ -12,6 +12,7 @@ protocol MainQuestCellDelegate: class {
     func delete(cell: MainQuestCell)
     func setDate(cell: MainQuestCell)
     func setTime(cell: MainQuestCell)
+    func edit(cell: MainQuestCell)
 }
 
 class MainQuestCell: UITableViewCell {
@@ -78,5 +79,10 @@ class MainQuestCell: UITableViewCell {
     @IBAction func timeButtonTapped(_ sender: Any) {
         delegate?.setTime(cell: self)
         print("TimeDelegate")
+    }
+    
+    @IBAction func editButtonTapped(_ sender: Any) {
+        delegate?.edit(cell: self)
+        print("EditDelegate")
     }
 }

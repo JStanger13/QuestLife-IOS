@@ -16,10 +16,7 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     
     let vibrate = SystemSoundID(kSystemSoundID_Vibrate)
     
-    //Heptic Feedback
-    let lightImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    let mediumImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium) //Do I need this?
-    let heavyImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    @IBOutlet weak var editTextField: UITextField!
     
     //set up sound effects
     var soundEffect: AVAudioPlayer? //Do I Need This?
@@ -31,6 +28,11 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var dimView: UIView!
 
+    @IBOutlet weak var editQuestView: UIView!
+    @IBOutlet weak var editQuestTransparentWhite: UIView!
+
+    @IBOutlet weak var editSaveButtonOutlet: UIButton!
+    
     //Transparent White Views
     @IBOutlet weak var timeViewTransparentWhite: UIView!
     @IBOutlet weak var deleteViewTransparentWhite: UIView!
@@ -61,9 +63,8 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var smallAvatarLvlUpImage: UIView!
     @IBOutlet weak var bigAvatarLvlUpImage: UIImageView!
     
-    
-    @IBOutlet var editDateView: UIView!
-    @IBOutlet weak var editDateTransparentWhite: UIView!
+
+    @IBOutlet weak var editLabel: UILabel!
     
     //Buttons
     @IBOutlet weak var setDateButton: UIButton!
@@ -82,7 +83,6 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     var mainQuestList : Results<Object>!
     var reversedQuestList : Results<Object>!
     var currentMain : MainQuestModel?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +149,8 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        PopUpViewService.hepticFeedback(type: "light")
+
         let item = mainQuestList[(mainQuestList.count - indexPath.row) - 1]
         
         Singleton.sharedInstance.mainQuest = item as? MainQuestModel
@@ -193,6 +195,7 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     @IBOutlet weak var lvlUpAvatarImage: UIImageView!
+    @IBOutlet weak var backLvlUpButtonOutlet: UIButton!
     
     //Level Up PopUp View-------------------------------------------------------------------------------------
     func launchLevelUpPopUpView(){
@@ -212,6 +215,7 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 self.lvlUpAvatarImage.isHidden = true
                 self.bigAvatarLvlUpImage.isHidden = false
+                self.backLvlUpButtonOutlet.fadeIn()
             }
         }
         
@@ -229,7 +233,7 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     //Add Main Qust PopUp View--------------------------------------------------------------------------------
     @IBAction func addMainQuestButton(_ sender: Any) {
         heavyImpactFeedbackGenerator.impactOccurred()
-
+        questSetButton.alpha = 0.0
         //Generate A New Boss
         self.boss = BossService.generateBoss(num: Int(arc4random_uniform(26)))
         bossImage.image = UIImage(named: boss!)
@@ -239,9 +243,12 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         PopUpViewService.setUpPopUpView(popUpView: createMainQuestPopupView, transparentePopUpView: createMainQuestTransparentWhite, mView: view, mDimView: dimView)
         
         PopUpViewService.setUpTextField(textField: textField)
-        self.questSetButton.isHidden = true
+        //self.questSetButton.isHidden = true
         textField.addTarget(self, action: #selector(checkUserInputInTextField), for: .editingChanged)
+        
     }
+    
+  
     
     
     //BackButtons------------------------------------------------------------------------------------------
@@ -250,6 +257,7 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func backButton(_ sender: Any) {
+        questSetButton.alpha = 0.0
         PopUpViewService.setBackButtonInUpPopUpView(popUpView: createMainQuestPopupView, mDimView: dimView)
         PopUpViewService.setUpTextField(textField: textField)
     }
@@ -262,6 +270,10 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBAction func timeBack(_ sender: Any) {
         PopUpViewService.setBackButtonInUpPopUpView(popUpView: timePopupView, mDimView: dimView
         )
+    }
+    @IBAction func editBack(_ sender: Any) {
+        editSaveButtonOutlet.alpha = 0.0
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: editQuestView, mDimView: dimView)
     }
     
     @IBAction func deleteNo(_ sender: Any) {
@@ -308,11 +320,9 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     
-    //Get Methods for Time & Date------------------------------------------------------------------------------
+    //Get Methods for Time & Date-----------------------------------------------------------------
     
-    //Condense Into One Method!!!!!!
-   
-   
+    
     func getDate(date: Date, type: String) -> String{
         let dateFormatter = DateFormatter()
 
@@ -336,13 +346,49 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         Singleton.sharedInstance.mainQuest =  mainQuestList[sender.tag] as? MainQuestModel
     }
     
+
+    @IBAction func saveEditedQuest(_ sender: Any) {
+        print(currentMain!.mainTitle)
+        print(currentMain!.mainDate)
+        print(currentMain!.mainTime)
+        print(currentMain!.mainQuestID)
+        print(currentMain!.mainSize)
+
+        RealmService.shared.saveObjects(obj: [MainQuestModel(title: (editTextField.text)!, boss: (currentMain!.mainBoss), date: (currentMain!.mainDate), time: (currentMain!.mainTime), key: (currentMain!.mainQuestID), size: (currentMain!.mainSize))])
+    
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: editQuestView, mDimView: dimView)
+        tableView.reloadData()
+    }
+    
+    
     func minimumDate(for calendar: FSCalendar) -> Date {
         return Date()
+    }
+    @objc func checkUserInputInTextField(){
+        PopUpViewService.animateFadeInView(viewIsHidden: (textField.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: questSetButton)
+    }
+    
+    @objc func checkEditViewUserInputInTextField(){
+        PopUpViewService.animateFadeInView(viewIsHidden: (editTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: editSaveButtonOutlet)
     }
 }
 
 extension MainQuestViewController : MainQuestCellDelegate {
-   
+    func edit(cell: MainQuestCell) {
+         if let indexPath = tableView?.indexPath(for: cell){
+            
+            currentMain = mainQuestList.reversed()[indexPath.row] as? MainQuestModel
+          
+            editLabel.text = String(describing: currentMain!.mainTitle)
+            PopUpViewService.hepticFeedback(type: "medium")
+            PopUpViewService.setUpPopUpView(popUpView: editQuestView, transparentePopUpView: editQuestTransparentWhite, mView: view, mDimView: dimView)
+            PopUpViewService.setUpTextField(textField: editTextField)
+
+            self.editTextField.addTarget(self, action: #selector(checkEditViewUserInputInTextField), for: .editingChanged)
+         }
+    }
+    
+   //editLabel
     func setDate(cell: MainQuestCell) {
         lightImpactFeedbackGenerator.impactOccurred()
 
@@ -407,10 +453,6 @@ extension MainQuestViewController : MainQuestCellDelegate {
 
             deleteQuestLabel.text = "Are you sure you want to delete this quest? You\(still!)have \(String(sideQuestsLeft)) \(verb!) left to complete!"
         }
-    }
-    
-    @objc func checkUserInputInTextField(){
-        PopUpViewService.animateFadeInView(viewIsHidden: (textField.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: questSetButton)
     }
 }
 

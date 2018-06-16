@@ -10,6 +10,10 @@ import Foundation
 import UIKit
 import AVFoundation
 
+//Heptic Feedback
+let lightImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+let mediumImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+let heavyImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
 
 class PopUpViewService {
     
@@ -42,6 +46,8 @@ class PopUpViewService {
     
     static func setBackButtonInUpPopUpView(popUpView: UIView, mDimView: UIView){
         playSound(sound: "pop-sound.wav")
+        mediumImpactFeedbackGenerator.impactOccurred()
+        
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: {
             popUpView.removeFromSuperview()
             popUpView.transform = CGAffineTransform(scaleX: 0.2, y: 0.2)
@@ -58,15 +64,23 @@ class PopUpViewService {
     static func playSound(sound: String) {
         let path = Bundle.main.path(forResource: sound, ofType:nil)!
         let url = URL(fileURLWithPath: path)
-        print("playing sound")
         
         do {
             soundEffect = try AVAudioPlayer(contentsOf: url)
-            soundEffect?.play()
-        } catch {
-            //do something
+            soundEffect?.prepareToPlay()
+            
+            let audioSession = AVAudioSession.sharedInstance()
+
+            do {
+                try audioSession.setCategory(AVAudioSessionCategoryAmbient)
+
+            }
+            }catch{
+        
         }
+        soundEffect?.play()
     }
+   
     
     static func setUpTextField(textField: UITextField){
         textField.becomeFirstResponder()
@@ -76,7 +90,6 @@ class PopUpViewService {
         textField.text = ""
         textField.autocapitalizationType = .sentences
     }
-    
     
     
     static func animateFadeInView(viewIsHidden: Bool, view: UIView){
@@ -91,6 +104,29 @@ class PopUpViewService {
            view.isHidden = false
             UIView.animate(withDuration: 0.3, animations: {
                 view.alpha = 1  }, completion:  nil)
+        }
+    }
+   
+    static func hepticFeedback (type: String){
+        switch type {
+        
+        case "light":
+            lightImpactFeedbackGenerator.impactOccurred()
+
+            break
+        
+        case "medium":
+            mediumImpactFeedbackGenerator.impactOccurred()
+
+            break
+        
+        case "heavy":
+            heavyImpactFeedbackGenerator.impactOccurred()
+            break
+        
+        default:
+            print("error")
+            break
         }
     }
 }

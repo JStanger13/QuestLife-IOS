@@ -9,7 +9,7 @@
 
 import UIKit
 import RealmSwift
-import AVFoundation
+//import AVFoundation
 
 class RootViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
    //vars
@@ -18,7 +18,7 @@ class RootViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var quests: Results<Object>!
     var mName: String?
     var mClass: String?
-    var soundEffect: AVAudioPlayer?
+    //var soundEffect: AVAudioPlayer?
 
     //Views
     @IBOutlet var nameCreatorView: UIView!
@@ -84,6 +84,7 @@ class RootViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
   
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        PopUpViewService.hepticFeedback(type: "light")
         mClass = avatars[indexPath.row]
         PopUpViewService.playSound(sound: "pop-sound.aiff")
         self.avatarPickedImage.image = UIImage(named: self.avatars[indexPath.row])
@@ -92,33 +93,55 @@ class RootViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //Buttons
     @IBAction func characterSelectButton(_ sender: Any) {
+        PopUpViewService.hepticFeedback(type: "medium")
+
+        characterSelectAction()
+    }
+
+    @IBAction func myQuestsButtonAction(_ sender: Any) {
+        PopUpViewService.hepticFeedback(type: "medium")
+
+        PopUpViewService.playSound(sound: "pop-sound.aiff")
+    }
+    
+    //Back Buttons
+    @IBAction func nameBackButton(_ sender: Any) {
+        PopUpViewService.hepticFeedback(type: "light")
+
+        PopUpViewService.playSound(sound: "pop-sound.aiff")
+        characterSelectAction()
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: nameCreatorView, mDimView: characterDimView)
+        self.textField.becomeFirstResponder()
+    }
+    
+    @IBAction func characterBackButton(_ sender: Any) {
+        PopUpViewService.hepticFeedback(type: "light")
+        characterBackAction(view: dimView)
+    }
+    
+    func characterSelectAction(){
+        PopUpViewService.hepticFeedback(type: "medium")
+
         PopUpViewService.setUpPopUpView(popUpView: characterSelectorView, transparentePopUpView: characterTransparentWhite, mView: view, mDimView: dimView)
         self.nameCreatorView.becomeFirstResponder()
         characterTransparentWhite.layer.masksToBounds = true
         self.characterSaveButton.isHidden = true
         self.avatarPickedImage.image = UIImage(named: "avatar")
-
-    }
-
-    //Back Buttons
-    @IBAction func nameBackButton(_ sender: Any) {
-        PopUpViewService.playSound(sound: "pop-sound.aiff")
-        PopUpViewService.setBackButtonInUpPopUpView(popUpView: nameCreatorView, mDimView: characterDimView)
-        self.textField.becomeFirstResponder()
-       
     }
     
-    @IBAction func characterBackButton(_ sender: Any) {
-        PopUpViewService.setBackButtonInUpPopUpView(popUpView: characterSelectorView, mDimView: dimView)
+    func characterBackAction(view: UIView){
+        PopUpViewService.hepticFeedback(type: "light")
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: characterSelectorView, mDimView: view)
         characterSaveButton.isHidden = true
     }
     
-    
     //Save Buttons
     @IBAction func characterSaveButton(_ sender: Any) {
+        PopUpViewService.hepticFeedback(type: "medium")
         PopUpViewService.setUpTextField(textField: textField)
-        
-        PopUpViewService.setUpPopUpView(popUpView: nameCreatorView, transparentePopUpView: nameTransparentWhite, mView: view, mDimView: characterDimView)
+        dimView.alpha = 0.8
+        characterBackAction(view: characterDimView)
+        PopUpViewService.setUpPopUpView(popUpView: nameCreatorView, transparentePopUpView: nameTransparentWhite, mView: view, mDimView: dimView)
         
         textField.addTarget(self, action: #selector(checkUserInputInTextField), for: .editingChanged)
         checkUserInputInTextField()
@@ -126,12 +149,14 @@ class RootViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
      @IBAction func nameSaveButtonAction(_ sender: Any) {
-            PopUpViewService.setBackButtonInUpPopUpView(popUpView: nameCreatorView, mDimView: dimView)
-            PopUpViewService.setBackButtonInUpPopUpView(popUpView: characterSelectorView, mDimView: dimView)
+        PopUpViewService.hepticFeedback(type: "medium")
+
+        PopUpViewService.setBackButtonInUpPopUpView(popUpView: nameCreatorView, mDimView: dimView)
+        
            
-            let user = UserModel(userName: createNameTextField.text!, userClass: mClass!, userLvl: 1, num: 0, den: 1)
-            RealmService.shared.saveObjects(obj: [user])
-            checkIfUserIsReturning()
+        let user = UserModel(userName: createNameTextField.text!, userClass: mClass!, userLvl: 1, num: 0, den: 1)
+        RealmService.shared.saveObjects(obj: [user])
+        checkIfUserIsReturning()
     }
     
     //Helper Functions
