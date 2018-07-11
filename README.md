@@ -5,7 +5,7 @@
 
 <p>Data is stored in Realm database.</p>
 
-![Alt text](app_images/image3_small.png)
-![Alt text](app_images/image2_small.png)
-![Alt text](app_images/image1_small.png)
+![Alt text](app_images/image1_smallest.png)
+![Alt text](app_images/image2_smallest.png)
+![Alt text](app_images/image3_smallest.png)
 
