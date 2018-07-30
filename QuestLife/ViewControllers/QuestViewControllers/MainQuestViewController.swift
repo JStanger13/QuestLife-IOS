@@ -11,10 +11,14 @@ import RealmSwift
 import FSCalendar
 import AVFoundation
 import AudioToolbox.AudioServices
+import EventKit
 
 class MainQuestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FSCalendarDataSource, FSCalendarDelegate {
-    
+    let store = EKEventStore()
+    var currentDateFormat: Date? = nil
+
     let vibrate = SystemSoundID(kSystemSoundID_Vibrate)
+    
     
     @IBOutlet weak var editTextField: UITextField!
     
@@ -127,6 +131,33 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         self.mainQuestList = RealmService.shared.getObjetcs(type: MainQuestModel.self)
     }
     
+    func createEventinTheCalendar(title:String, forDate eventStartDate:Date, toDate eventEndDate:Date) {
+        store.requestAccess(to: .event) { (success, error) in
+            if  error == nil {
+                let event = EKEvent.init(eventStore: self.store)
+                event.title = title
+                event.calendar = self.store.defaultCalendarForNewEvents // this will return deafult calendar from device calendars
+                event.startDate = eventStartDate
+                event.endDate = eventEndDate
+
+                
+                let alarm = EKAlarm.init(absoluteDate: Date.init(timeInterval: -3600, since: event.startDate))
+                event.addAlarm(alarm)
+                
+                do {
+                    try self.store.save(event, span: .thisEvent)
+                    //event created successfullt to default calendar
+                } catch let error as NSError {
+                    print("failed to save event with error : \(error)")
+                }
+                
+            } else {
+                //we have error in getting access to device calnedar
+                print("error = \(String(describing: error?.localizedDescription))")
+            }
+        }
+    }
+    
     //TableView Methods-------------------------------------------------------------------------------------
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -151,10 +182,11 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         PopUpViewService.hepticFeedback(type: "light")
 
-        let item = mainQuestList[(mainQuestList.count - indexPath.row) - 1]
+        //let item = mainQuestList[(mainQuestList.count - indexPath.row) - 1]
         
-        Singleton.sharedInstance.mainQuest = item as? MainQuestModel
-        Singleton.sharedInstance.row = (mainQuestList.count - indexPath.row) - 1
+        //Singleton.sharedInstance.mainQuest = item as? MainQuestModel
+        //Singleton.sharedInstance.row = (mainQuestList.count - indexPath.row) - 1
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -164,6 +196,14 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
                 let backItem = UIBarButtonItem()
                 backItem.title = ""
                 navigationItem.backBarButtonItem = backItem
+                
+                let indexPath = self.tableView.indexPathForSelectedRow
+                
+
+                let currentQuest = self.mainQuestList[(self.mainQuestList.count - (indexPath?.row)!) - 1]
+               
+                let destinationVC = segue.destination as! SideQuestViewController
+                destinationVC.mainQuest = currentQuest as? MainQuestModel
             }
         }
     }
@@ -229,8 +269,8 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         self.youHaveLeveledUpLabel.text = "You have reached level \(user!.lvlString())."
     }
     
+    //Add Main Qust PopUp View-------------------------------------------------------------------------------
     
-    //Add Main Qust PopUp View--------------------------------------------------------------------------------
     @IBAction func addMainQuestButton(_ sender: Any) {
         heavyImpactFeedbackGenerator.impactOccurred()
         questSetButton.alpha = 0.0
@@ -247,8 +287,6 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         textField.addTarget(self, action: #selector(checkUserInputInTextField), for: .editingChanged)
         
     }
-    
-  
     
     
     //BackButtons------------------------------------------------------------------------------------------
@@ -314,6 +352,10 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
        
         RealmService.shared.saveObjects(obj: [MainQuestModel(title: (self.currentMain?.mainTitle)!, boss: (self.currentMain?.mainBoss)!, date: currentDate!, time: (self.currentMain?.mainTime)!, key: (self.currentMain?.mainQuestID)!)])
         PopUpViewService.setBackButtonInUpPopUpView(popUpView: datePopUpView, mDimView: dimView)
+        let calendar = Calendar.current
+        var endDate =  calendar.date(byAdding: .hour, value: 24, to: currentDateFormat!)
+        createEventinTheCalendar(title: (self.currentMain?.mainTitle)!, forDate: currentDateFormat!, toDate: endDate!)
+        
         self.tableView.reloadData()
         print("Set Button: \(String(describing: currentDate!))")
 
@@ -327,11 +369,14 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         let dateFormatter = DateFormatter()
 
         if type.contains("time"){
-            dateFormatter.dateFormat = "h mm a"
+            //dateFormatter.dateFormat = "h mm a"
+            dateFormatter.dateFormat = "h : mm a"
+            
         } else {
             dateFormatter.dateFormat = "MM/dd/yyyy"
         }
         setDateButton.isHidden = false
+        self.currentDateFormat = date
         return dateFormatter.string(from: date)
     }
   
@@ -364,6 +409,7 @@ class MainQuestViewController: UIViewController, UITableViewDelegate, UITableVie
     func minimumDate(for calendar: FSCalendar) -> Date {
         return Date()
     }
+    
     @objc func checkUserInputInTextField(){
         PopUpViewService.animateFadeInView(viewIsHidden: (textField.text?.trimmingCharacters(in: .whitespaces).isEmpty)!, view: questSetButton)
     }

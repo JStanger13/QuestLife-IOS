@@ -9,6 +9,8 @@
 
 import UIKit
 import RealmSwift
+import UserNotifications
+
 //import AVFoundation
 
 class RootViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -55,6 +57,10 @@ class RootViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: {didAllow, error in
+        })
+        
         PopUpViewService.setUpTextField(textField: textField)
         tableView.bounces = false
     

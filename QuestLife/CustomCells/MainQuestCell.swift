@@ -40,11 +40,15 @@ class MainQuestCell: UITableViewCell {
     @IBOutlet weak var timeButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
+    
+    @IBOutlet weak var notificationSwitch: UISwitch!
+    
     func Configure(with mainQuestModel: MainQuestModel){
         bossImage.image = UIImage(named: mainQuestModel.mainBoss)
         mainQuestTitleLabel.text = mainQuestModel.mainTitle
         dateLabel.text = mainQuestModel.mainDate
         timeLabel.text = mainQuestModel.mainTime
+        
        
         if (mainQuestModel.mainTime.trimmingCharacters(in: .whitespaces).isEmpty){
             timeButtonImage.image = UIImage(named: "white_time")
@@ -57,6 +61,7 @@ class MainQuestCell: UITableViewCell {
         }else{
             dateButtonImage.image = UIImage(named: "red_calendar")
         }
+        
  
         insideView.layer.cornerRadius = 5
         insideView.layer.masksToBounds = true

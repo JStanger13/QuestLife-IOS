@@ -80,7 +80,7 @@ class SideQuestViewController: UIViewController, UITableViewDelegate, UITableVie
         
         tableView.bounces = false
         
-        mainQuest = Singleton.sharedInstance.mainQuest
+        //mainQuest = Singleton.sharedInstance.mainQuest
         mainQuestSideLabel.text = "\(mainQuest?.mainTitle ?? "-")"
         sideBossImage.image = UIImage(named: (mainQuest?.mainBoss)!)
         bossNameLabel.text = "\(mainQuest?.mainBoss ?? "-")"
